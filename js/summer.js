@@ -1776,7 +1776,7 @@
 						//$alert(args);
 						if(args == undefined)
 							args = sender;
-						var _func = jsonArgs[callback_KEY];
+						var _func = $__cbm[newCallBackFnName];
 						_func(sender, args);
 					}catch(e){
 						alert(e);

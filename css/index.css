@@ -4,4 +4,246 @@
     left: 0;
     right: 0;
     bottom: 0;
+    font-size: 0;
+}
+
+header.lib-header {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    border: 1px solid #F6F6F6;
+    background-color: #fff;
+}
+
+.mui-table-view-chevron li.lib-list-item-wrapper {
+    padding: 10px 15px;
+}
+
+.lib-list-item .lib-img-wrapper {
+    display: inline-block;
+    margin-right: 14px;
+    vertical-align: top;
+    width: 36px;
+    height: 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 36px 36px;
+}
+
+.lib-right-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: 27px center;
+    background-size: 18px 18px;
+}
+
+.lib-list-item .lib-type-file {
+    background-image: url(../img/file@2x.png);
+}
+
+.lib-list-item .lib-type-doc {
+    background-image: url(../img/doc@2x.png);
+}
+
+.lib-list-item .lib-type-txt {
+    background-image: url(../img/txt@2x.png);
+}
+
+.lib-list-item .lib-type-xls {
+    background-image: url(../img/xls@2x.png);
+}
+
+.lib-list-item .lib-type-pdf {
+    background-image: url(../img/pdf@2x.png);
+}
+
+.lib-list-item .lib-type-jpg {
+    background-image: url(../img/jpg@2x.png);
+}
+
+.lib-list-item .lib-type-ppt {
+    background-image: url(../img/ppt@2x.png);
+}
+
+.lib-list-item .lib-type-png {
+    background-image: url(../img/png@2x.png);
+}
+
+.lib-list-item .lib-type-other {
+    background-image: url(../img/other@2x.png);
+}
+
+.lib-list-item .lib-type-arrow {
+    background-image: url(../img/arrow@2x.png);
+}
+
+.lib-list-item .lib-type-post {
+    background-image: url(../img/post@2x.png);
+}
+
+@media (-webkit-min-device-pixel-ratio: 3),
+(min-device-pixel-ratio: 3) {
+    .lib-list-item .lib-type-file {
+        background-image: url(../img/file@3x.png);
+    }
+    .lib-list-item .lib-type-doc {
+        background-image: url(../img/doc@3x.png);
+    }
+    .lib-list-item .lib-type-txt {
+        background-image: url(../img/txt@3x.png);
+    }
+    .lib-list-item .lib-type-xls {
+        background-image: url(../img/xls@3x.png);
+    }
+    .lib-list-item .lib-type-pdf {
+        background-image: url(../img/pdf@3x.png);
+    }
+    .lib-list-item .lib-type-ppt {
+        background-image: url(../img/ppt@3x.png);
+    }
+    .lib-list-item .lib-type-jpg {
+        background-image: url(../img/jpg@3x.png);
+    }
+    .lib-list-item .lib-type-png {
+        background-image: url(../img/png@3x.png);
+    }
+    .lib-list-item .lib-type-other {
+        background-image: url(../img/other@3x.png);
+    }
+    .lib-list-item .lib-type-arrow {
+        background-image: url(../img/arrow@3x.png);
+    }
+    .lib-list-item .lib-type-post {
+        background-image: url(../img/post@3x.png);
+    }
+}
+
+.lib-list-item .lib-img-content {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 0;
+    line-height: 0;
+}
+
+.lib-img-content .title {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 22px;
+    font-size: 14px;
+    color: #4A4A4A;
+}
+
+.lib-img-content .time {
+    line-height: 14px;
+    font-size: 14px;
+    color: #ACACAC;
+}
+
+
+/* toast的一些样式 */
+
+.lib-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 11;
+    background-color: #efeff4;
+}
+
+.lib-wrapper-s {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 11;
+}
+
+.lib-toast-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    line-height: 0;
+}
+
+.lib-toast-wrapper .lib-toast-content {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    z-index: 3;
+    width: 160px;
+    height: 160px;
+    padding-top: 30px;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    border-radius: 10px;
+    background-color: #111;
+    opacity: 0.7;
+}
+
+.toast-img-wrapper {
+    width: 100%;
+    text-align: center;
+}
+
+.lib-toast-title {
+    margin-top: 18px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+}
+
+.lib-toast-email {
+    margin-top: 7px;
+    line-height: 18px;
+    text-align: center;
+    font-size: 13px;
+    color: #fff;
+}
+
+.lib-scroll-wrapper {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.lib-iframe-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+iframe.lib-open-iframe {
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.lib-toast-enter-active,
+.lib-toast-leave-active {
+    transition: all 0.3s;
+    opacity: 1;
+}
+
+.lib-toast-enter,
+.lib-toast-leave-to {
+    opacity: 0;
+}
+
+.lib-slide-enter-active,
+.lib-slide-leave-active {
+    transition: all 0.3s;
+}
+
+.lib-slide-enter,
+.lib-slide-leave-to {
+    transform: translateX(100%);
+    -webkit-transform: translateX(100%);
 }

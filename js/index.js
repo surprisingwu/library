@@ -71,6 +71,7 @@
      },
     methods: {
       openRequestAgain: function(){
+        this.isError = false
         this.isShowLoading = true
         _.getUserInfo(this.storeUserInfo,this.getUserInfoErr)
       },

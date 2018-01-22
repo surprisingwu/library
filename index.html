@@ -28,7 +28,7 @@
             <i class="mui-icon mui-icon-back" @click="exitApp"></i>
             <h1 class="mui-title">文库</h1>
         </header>
-        <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+        <div id="refreshContainer" class="mui-content mui-scroll-wrapper" ref="bsWrapper">
             <div class="mui-scroll">
                 <!--数据列表-->
                 <ul class="mui-table-view mui-table-view-chevron">
@@ -38,8 +38,17 @@
                 </ul>
             </div>
         </div>
-        <lib-toast ref='libToast' title="发送成功" email="wu**@yonyou.com" img-url="img/success@2x.png"></lib-toast>
-        <lib-toast ref='libToastError' img-url="img/error@2x.png" title="发送失败"></lib-toast>
+        <div class="lib-nofile-container" v-show="isNoFile">
+            <lib-nofile-img></lib-nofile-img>
+        </div>
+        <div class="lib-nofile-container" v-show="isError" @click="openRequestAgain">
+            <net-err-img></net-err-img>
+        </div>
+        <div class="lib-loading-wrapper" v-show="!data.length&&isShowLoading">
+            <lib-loading></lib-loading>
+        </div>
+        <lib-toast ref='libToast' title="发送成功" post-success="true" img-url="img/success@2x.png"></lib-toast>
+        <lib-toast ref='libToastError' img-url="img/error@2x.png" post-success="error" title="发送失败"></lib-toast>
         <keep-alive>
             <transition name="lib-slide">
                 <router-view></router-view>

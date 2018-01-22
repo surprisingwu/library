@@ -1,29 +1,29 @@
-(function(global, factory) {
-    "use strict";
-    if (typeof module === "object" && typeof module.exports === "object") {
-        module.exports = global.document ?
-            factory(global, true) :
-            function(w) {
-                if (!w.document) {
-                    throw new Error("jQuery requires a window with a document");
-                }
-                return factory(w);
-            };
-    } else {
-        factory(global);
-    }
-})(typeof window !== "undefined" ? window : this, function(window, noGlobal) {
-    var arr = [];
-    var getProto = Object.getPrototypeOf;
-    var slice = arr.slice;
-    var concat = arr.concat;
-    var push = arr.push;
-    var indexOf = arr.indexOf;
-    var class2type = {};
-    var toString = class2type.toString;
-    var hasOwn = class2type.hasOwnProperty;
-    var fnToString = hasOwn.toString;
-    var ObjectFunctionString = fnToString.call(Object);
+;(function(global, factory) {
+  'use strict'
+  if (typeof module === 'object' && typeof module.exports === 'object') {
+    module.exports = global.document
+      ? factory(global, true)
+      : function(w) {
+          if (!w.document) {
+            throw new Error('jQuery requires a window with a document')
+          }
+          return factory(w)
+        }
+  } else {
+    factory(global)
+  }
+})(typeof window !== 'undefined' ? window : this, function(window, noGlobal) {
+  var arr = []
+  var getProto = Object.getPrototypeOf
+  var slice = arr.slice
+  var concat = arr.concat
+  var push = arr.push
+  var indexOf = arr.indexOf
+  var class2type = {}
+  var toString = class2type.toString
+  var hasOwn = class2type.hasOwnProperty
+  var fnToString = hasOwn.toString
+  var ObjectFunctionString = fnToString.call(Object)
   function _(options) {
     // 初始化的一些属性
     this.isHttps = false
@@ -51,7 +51,6 @@
       target = arguments[i] || {}
       i++
     }
-
     if (typeof target !== 'object' && !this.isFunction(target)) {
       target = {}
     }
@@ -60,7 +59,6 @@
       target = this
       i--
     }
-
     for (; i < length; i++) {
       if ((options = arguments[i]) != null) {
         for (name in options) {
@@ -82,29 +80,16 @@
             } else {
               clone = src && this.isPlainObject(src) ? src : {}
             }
-
-            // Never move original objects, clone them
             target[name] = this.extend(deep, clone, copy)
-
-            // Don't bring in undefined values
           } else if (copy !== undefined) {
             target[name] = copy
           }
         }
       }
     }
-
-    // Return the modified object
     return target
   }
   _.extend({
-    // 检测一个对象的类型    eg: 'Fouction'
-    checkObj: function(type) {
-      return function(obj) {
-        return Object.prototype.toString.call(obj) === '[object ' + type + ']'
-      }
-    },
-    // 检测一个对象的类型
     type: function(obj) {
       if (obj == null) {
         return obj + ''
@@ -114,34 +99,14 @@
         ? class2type[toString.call(obj)] || 'object'
         : typeof obj
     },
-    // 是否是伪数组
-    isArrayLike: function(obj) {
-      var length = !!obj && 'length' in obj && obj.length,
-        type = this.type(obj)
-
-      if (type === 'function' || this.isWindow(obj)) {
-        return false
-      }
-
-      return (
-        type === 'array' ||
-        length === 0 ||
-        (typeof length === 'number' && length > 0 && length - 1 in obj)
-      )
-    },
-    // 是否是window对象
-    isWindow: function(obj) {
-      return obj != null && obj === obj.window
-    },
-    // 是否是一个对象
-    isObject: function(obj) {
-      return this.type(obj) === 'object'
-    },
-    // 是否是一个方法
     isFunction: function(obj) {
       return this.type(obj) === 'function'
     },
-    // 是否是数字
+
+    isWindow: function(obj) {
+      return obj != null && obj === obj.window
+    },
+
     isNumeric: function(obj) {
       var type = this.type(obj)
       return (
@@ -149,124 +114,34 @@
         !isNaN(obj - parseFloat(obj))
       )
     },
-    // 是否是原生的对象,继承自Object
     isPlainObject: function(obj) {
+      var proto, Ctor
+      if (!obj || toString.call(obj) !== '[object Object]') {
+        return false
+      }
+      proto = getProto(obj)
+      if (!proto) {
+        return true
+      }
+      Ctor = hasOwn.call(proto, 'constructor') && proto.constructor
       return (
-        this.isObject(obj) &&
-        !this.isWindow(obj) &&
-        getProto(obj) === Object.prototype
+        typeof Ctor === 'function' &&
+        fnToString.call(Ctor) === ObjectFunctionString
       )
     },
-    /**
-     * @ jsonp跨域简单的封装(需要后台配合)
-     * url: String  后台的url
-     * config: Object  {data:json,callback: fn,errpr:fn,timeout:Number}
-     */
-
-    jsonp: function(url, config) {
-      var data = config.data || []
-      var paraArr = [],
-        paraString = '' // get请求的参数。
-      var urlArr
-      var callbackName // 每个回调函数一个名字。按时间戳。
-      var script, head // 要生成script标签。head标签。
-      var supportLoad // 是否支持 onload。是针对IE的兼容处理。
-      var onEvent // onload或onreadystatechange事件。
-      var timeout = config.timeout || 0 // 超时
-
-      for (var i in data) {
-        if (data.hasOwnProperty(i)) {
-          paraArr.push(
-            encodeURIComponent(i) + '=' + encodeURIComponent(data[i])
-          )
-        }
-      }
-
-      urlArr = url.split('?') // 链接中原有的参数。
-      if (urlArr.length > 1) {
-        paraArr.push(urlArr[1])
-      }
-
-      callbackName = 'callback' + new Date().getTime()
-      paraArr.push('callback=' + callbackName)
-      paraString = paraArr.join('&')
-      url = urlArr[0] + '?' + paraString
-
-      script = document.createElement('script')
-      script.loaded = false // 为了实现IE下的onerror做的处理。JSONP的回调函数总是在script的onload事件（IE为onreadystatechange）之前就被调用了。因此我们在正向回调执行之时，为script标签添加一个属性，然后待到onload发生时，再检测有没有这个属性就可以判定是否请求成功，没有成功当然就调用我们的error。
-
-      // 将回调函数添加到全局。
-      window[callbackName] = function(arg) {
-        var callback = config.callback
-        callback(arg)
-        script.loaded = true
-      }
-
-      head = document.getElementsByTagName('head')[0]
-      head.insertBefore(script, head.firstChild) // chrome下第二个参数不能为null
-      script.src = url
-
-      supportLoad = 'onload' in script
-      onEvent = supportLoad ? 'onload' : 'onreadystatechange'
-
-      script[onEvent] = function() {
-        if (script.readyState && script.readyState != 'loaded') {
-          return
-        }
-        if (script.readyState == 'loaded' && script.loaded == false) {
-          script.onerror()
-          return
-        }
-        // 删除节点。
-        script.parentNode &&
-          script.parentNode.removeChild(script) &&
-          (head.removeNode && head.removeNode(this))
-        script = script[onEvent] = script.onerror = window[callbackName] = null
-      }
-
-      script.onerror = function() {
-        if (window[callbackName] == null) {
-          console.log('请求超时，请重试！')
-        }
-        config.error && config.error() // 如果有专门的error方法的话，就调用。
-        script.parentNode &&
-          script.parentNode.removeChild(script) &&
-          (head.removeNode && head.removeNode(this))
-        script = script[onEvent] = script.onerror = window[callbackName] = null
-      }
-
-      if (timeout != 0) {
-        setTimeout(function() {
-          if (script && script.loaded == false) {
-            window[callbackName] = null // 超时，且未加载结束，注销函数
-            script.onerror()
-          }
-        }, timeout)
-      }
+    isObject: function(obj) {
+      return this.type(obj) === 'object'
     },
-    /**
-     * @param 实现深复制
-     */
-    deepCopy: function(source, target) {
-      var target = target || {}
-      for (var i in source) {
-        if (typeof source[i] === 'object') {
-          // 要考虑深复制问题了
-          if (source[i].constructor === Array) {
-            // 这是数组
-            target[i] = []
-          } else {
-            // 这是对象
-            target[i] = {}
-          }
-          // 进行递归
-          this.deepCopy(source[i], target[i])
-        } else {
-          target[i] = source[i]
-        }
+    isEmptyObject: function(obj) {
+      /* eslint-disable no-unused-vars */
+      var name
+
+      for (name in obj) {
+        return false
       }
-      return target
+      return true
     },
+
     isMobile: function() {
       var regexp = /(android|os) (\d{1,}(\.|\_)\d{1,})/
       return regexp.test(this.userAgent())
@@ -282,13 +157,44 @@
     userAgent: function() {
       return navigator.userAgent.toLowerCase()
     },
+    merge: function(first, second) {
+      var len = +second.length,
+        j = 0,
+        i = first.length
 
-    // 遍历的方法
+      for (; j < len; j++) {
+        first[i++] = second[j]
+      }
+
+      first.length = i
+
+      return first
+    },
+    makeArray: function(arr, results) {
+      var ret = results || []
+
+      if (arr != null) {
+        if (isArrayLike(Object(arr))) {
+          _.merge(ret, typeof arr === 'string' ? [arr] : arr)
+        } else {
+          push.call(ret, arr)
+        }
+      }
+
+      return ret
+    },
+    // 转化成数组
+    toArray: function(obj) {
+      if (this.isArrayLike(obj)) {
+        return slice.call(obj)
+      }
+    },
+    // 遍历可迭代对象(数组,伪数组,set,map)
     each: function(obj, callback) {
       var length,
         i = 0
 
-      if (this.isArrayLike(obj)) {
+      if (isArrayLike(obj)) {
         length = obj.length
         for (; i < length; i++) {
           if (callback.call(obj[i], obj[i], i) === false) {
@@ -305,7 +211,10 @@
 
       return obj
     },
-    // date: dateObj  fmt:日期格式（yyyy-MM-dd）
+    /**
+     * @param date: 日期对象
+     * @param fmt: string  格式化的方式 'yyyy-MM-dd'
+     */
     formatDate: function(date, fmt) {
       var o = {
         'M+': date.getMonth() + 1, //月份
@@ -334,37 +243,7 @@
       }
       return fmt
     },
-    // 等比缩放图片 （最好压缩的时候，就进行等比缩放）
-    compressImg: function(image, maxWidth, maxHeight) {
-      var maxWidth = maxWidth
-      var maxHeight = maxHeight
-      var hRatio
-      var wRatio
-      var Ratio = 1
-      var w = image.width
-      var h = image.height
-      wRatio = maxWidth / w
-      hRatio = maxHeight / h
-      if (maxWidth == 0 && maxHeight == 0) {
-        Ratio = 1
-      } else if (maxWidth == 0) {
-        //
-        if (hRatio < 1) Ratio = hRatio
-      } else if (maxHeight == 0) {
-        if (wRatio < 1) Ratio = wRatio
-      } else if (wRatio < 1 || hRatio < 1) {
-        Ratio = wRatio <= hRatio ? wRatio : hRatio
-      }
-      if (Ratio < 1) {
-        w = w * Ratio
-        h = h * Ratio
-      }
-      var imgDom = new Image()
-      imgDom.height = h
-      imgDom.width = w
-      return imgDom
-    },
-    // 保存数据到本地
+    // 存储数据
     setStorage: function(key, value) {
       var saveObj = window.localStorage._saveObj_
       if (!saveObj) {
@@ -375,7 +254,7 @@
       saveObj[key] = value
       window.localStorage._saveObj_ = JSON.stringify(saveObj)
     },
-    // 从本地加载数据 def:为默认值
+    // 获取某一个key, 可以传一个默认值
     getStorage: function(key, def) {
       var saveObj = window.localStorage._saveObj_
       if (!saveObj) {
@@ -385,7 +264,7 @@
       var ret = saveObj[key]
       return ret || def
     },
-    // 从本地存储中移除某一个属性
+    // 从存储中移除某一个key
     removeStorageItem: function(key) {
       var saveObj = window.localStorage._saveObj_
       if (saveObj) {
@@ -407,21 +286,89 @@
       }
       return result[1]
     },
-    // url后面拼接参数,
-    addUrlParam: function(url, name, value) {
-      // 拼接的参数多时,可以传一个url,一个json.单个时可以传url,key,valu
-      url += url.indexOf('?') == -1 ? '?' : '&'
-      if (arguments.length === 3) {
-        url += name + '=' + value
-        return url
+    // 深拷贝
+    deepCopy: function(source, target) {
+      var target = target || {}
+      for (var i in source) {
+        if (typeof source[i] === 'object') {
+          target[i] = source[i].constructor === Array ? [] : {}
+          deepCopy(source[i], target[i])
+        } else {
+          target[i] = source[i]
+        }
       }
-      var options = name // 第二个参数为json
-      for (var key in options) {
-        url += key + '=' + options[key]
-      }
-      return url
+      return target
     }
   })
+  _.each(
+    'Boolean Number String Function Array Date RegExp Object Error Symbol'.split(
+      ' '
+    ),
+    function(name, i) {
+      class2type['[object ' + name + ']'] = name.toLowerCase()
+    }
+  )
+
+  var _checkObj = function(type) {
+    return function(obj) {
+      return Object.prototype.toString.call(obj) === '[object ' + type + ']'
+    }
+  }
+  var extend = function(Child, Parent) {
+    var F = function() {}
+    F.prototype = Parent.prototype
+    Child.prototype = new F()
+    Child.prototype.constructor = Child
+    Child.uber = Parent.prototype
+  }
+
+  //  是否是一个可迭代的类数组
+  function isArrayLike(obj) {
+    var length = !!obj && 'length' in obj && obj.length,
+      type = _.type(obj)
+
+    if (type === 'function' || _.isWindow(obj)) {
+      return false
+    }
+
+    return (
+      type === 'array' ||
+      length === 0 ||
+      (typeof length === 'number' && length > 0 && length - 1 in obj)
+    )
+  }
+  // 确定运行的环境
+  var vendor = (function() {
+    var elementStyle = document.createElement('div').style
+    var transformNames = {
+      webkit: 'webkitTransform',
+      Moz: 'MozTransform',
+      O: 'OTransform',
+      ms: 'msTransform',
+      standard: 'transform'
+    }
+
+    for (var key in transformNames) {
+      if (elementStyle[transformNames[key]] !== undefined) {
+        return key
+      }
+    }
+    return false
+  })()
+  // 返回对应的兼容样式
+  _.prefixStyle = function(style) {
+    if (vendor === false) {
+      return false
+    }
+    if (vendor === 'standard') {
+      if (style === 'transitionEnd') {
+        return 'transitionend'
+      }
+      return style
+    }
+    return vendor + style.charAt(0).toUpperCase() + style.substr(1)
+  }
+  // 交互部分
 
   var writeConfig = function(ip, port) {
     summer.writeConfig({
@@ -546,7 +493,6 @@
         callback: success,
         error: error
       }
-      debugger
       callNative(params, _isAsync(options))
     },
     dimension: function(options, success, error) {
@@ -595,6 +541,22 @@
         },
         false
       )
+    },
+    openPDF: function(options, success, error) {
+      if (_.isFunction(options)) {
+        error = success
+        success = options
+        options = {}
+      }
+      var params = {
+        params: {
+          transtype: 'openpdf'
+        },
+        callback: success,
+        error: error
+      }
+      params.params = _.deepCopy(options, params.params)
+      callNative(params, _isAsync(options))
     },
     _checkAttribute: function(obj, key, def) {
       return obj[key] === undefined ? def : obj[key]
@@ -753,10 +715,10 @@
       return params
     }
   })
-    // 挂载到全局对象上
-    window._ = _
-    if (!noGlobal) {
-        return window._ = _;
-    }
-    return _
+  // 挂载到全局对象上
+  window._ = _
+  if (!noGlobal) {
+    return (window._ = _)
+  }
+  return _
 })

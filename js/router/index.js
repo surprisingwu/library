@@ -6,17 +6,21 @@ var libraryRouter = new VueRouter({
             children: [
                 {
                     path: 'haschildren',
-                    component: libraryComponents.ThirdPage
-                },
-                {
-                    path: 'nochild',
-                    component: libraryComponents.OpenIframe
-                }
+                    component: libraryComponents.ThirdPage,
+                    children: [
+                        {
+                            path: 'haschildren',
+                            component: libraryComponents.FouthPage,
+                            children: [
+                                {
+                                    path: 'haschildren',
+                                    component: libraryComponents.FivePage,
+                                }                            
+                            ]
+                        },
+                    ]
+                }               
             ]
-        },
-        {
-            path: '/index/nochild',
-            component: libraryComponents.OpenIframe
         }
     ]
 }) 

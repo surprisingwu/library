@@ -9,6 +9,9 @@
     },
     data: {
       data: [],
+      options: {
+        click: true
+      },
       isShowLoading: true,
       userCode: '',
       isError: false,
@@ -24,50 +27,6 @@
           _self.exitApp()
         }     
       })
-      setTimeout(function(){
-        _self.scroll = new BScroll(_self.$refs.bsWrapper,{
-          click: true
-        })
-      },20)
-      // setTimeout(function() {
-    //     mui.init({
-    //       pullRefresh: {
-    //         container: '#refreshContainer',
-    //         down: {
-    //           height: '50px',
-    //           auto: false,
-    //           height: 60,
-    //           contentdown: '下拉可以刷新',
-    //           contentover: '释放立即刷新',
-    //           contentrefresh: '正在刷新...',
-    //           auto: false,
-    //           callback: function() {
-    //             console.log(1)
-    //             setTimeout(function() {
-    //               mui('#refreshContainer')
-    //                 .pullRefresh()
-    //                 .endPulldownToRefresh()
-    //               mui.toast('刷新成功')
-    //             }, 1000)
-    //           }
-    //         },
-    //         up: {
-    //           height: 50,
-    //           auto: false,
-    //           contentrefresh: '正在加载...',
-    //           contentnomore: '没有更多数据了',
-    //           callback: function() {
-    //             setTimeout(function() {
-    //               // 没有更多数据的时候传true
-    //               mui('#refreshContainer')
-    //                 .pullRefresh()
-    //                 .endPullupToRefresh(true)
-    //             }, 1000)
-    //           }
-    //         }
-    //       }
-    //     })
-    //   }, 20)
      },
     methods: {
       openRequestAgain: function(){
@@ -76,13 +35,12 @@
         _.getUserInfo(this.storeUserInfo,this.getUserInfoErr)
       },
       clickItem: function(i) {
-        console.log(1)
         var isCatalog = this.data[i].type
         this.$store.commit(SET_CURRENT_ITEM, this.data[i])
         if (isCatalog === CATALOG_FILE) {
           this.$router.push({ path: '/index/haschildren' })
         } else {
-          this.openPDFHandler(i)
+         this.$router.push({path: '/index/hasnochild'})
         }
       },
       callback: function(data) {
@@ -91,7 +49,10 @@
           return
         }
         data = data.result.catalog
+        // 为了让横屏也可以滚动,加一个空的文件夹
+        var temp = {file_type: 'catalog',file_name: '空文价夹',filetime: {time: Date.now()}}
         this.data = data
+        this.data.push(temp)
         if (!(data&&this.data.length)){
           this.isNoFile = true
         }
@@ -148,7 +109,7 @@
       LibToast: libraryComponents.LibToast,
       LibLoading: libraryComponents.LibLoading,
       LibNofileImg: libraryComponents.LibNofileImg,
-      NetErrImg: libraryComponents.NetErrImg
+      NetErrImg: libraryComponents.NetErrImg,
     }
   })
 }

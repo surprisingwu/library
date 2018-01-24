@@ -86,22 +86,6 @@ libraryComponents.LibHeader = {
     }
   }
 }
-//  scroll组件
-libraryComponents.ScrollWrapper = {
-  template:
-    '<div class="lib-scroll-wrapper" ref="scrollWrapper">\
-          <slot></slot>     \
-      </div>',
-  mounted: function() {
-    var scrollWrapper = this.$refs.scrollWrapper
-    var _self = this
-    setTimeout(function() {
-      _self.scroll = new BScroll(scrollWrapper, {
-        click: true
-      })
-    }, 20)
-  }
-}
 libraryComponents.ListItem = {
   template:
     '<div @click.stop="clickItem" class="lib-list-item">\
@@ -116,7 +100,7 @@ libraryComponents.ListItem = {
     data: {
       type: Object,
       default: {}
-    }
+    },
   },
   computed: {
     libGetCls: function() {
@@ -144,9 +128,17 @@ libraryComponents.ListItem = {
   },
   methods: {
     clickItem: function() {
+      // 排除浏览器派发的事件
+      if (!event._constructed) {
+        return
+      }
       this.$emit('listitemclick')
     },
     handlerEamil: function() {
+      // 排除浏览器派发的事件
+      if (!event._constructed) {
+        return
+      }
       var type = this.data.type
       if (type === 'catalog') {
         this.$emit('listitemclick')
@@ -216,12 +208,12 @@ libraryComponents.NetErrImg = {
 }
 var libCommonTemplate =  '<div class="lib-wrapper">\
 <lib-header :title="preParentFile.file_name"></lib-header>\
-<scroll-wrapper><div>\
+<div class="scroll-wrapper lib-scroll-wrapper"><cube-scroll :data="data" :options="options">\
 <ul class="mui-table-view mui-table-view-chevron">\
 <li class="mui-table-view-cell lib-list-item-wrapper" v-for="(item,index) in data">\
     <list-item :data="item" @listitemclick="clickItem(index)" @postemail="postEmail(index)"></list-item>\
-</li></ul></div></div></scroll-wrapper>\
-<div class="lib-nofile-container" v-show="!data.length"><lib-nofile-img></lib-nofile-img>\
+</li></ul></cube-scroll></div>\
+<div class="lib-nofile-container" v-show="isNofile"><lib-nofile-img></lib-nofile-img></div>\
 <lib-toast ref="libToast" title="发送成功" post-success="true" img-url="img/success@2x.png"></lib-toast>\
 <lib-toast ref="libToastError" img-url="img/error@2x.png" post-success="error" title="发送失败"></lib-toast>\
 <keep-alive>\
@@ -247,19 +239,33 @@ libMixins.commonComponents = {
     this.preParentFile = this.getItem||{}
   },
   methods: {
+    clickItem: function(i) {
+      var isCatalog = this.data[i].type
+      this.$store.commit(SET_CURRENT_ITEM, this.data[i])
+      var currentRouter = this.$router.currentRoute.path
+      if (isCatalog === CATALOG_FILE) {
+        currentRouter = currentRouter+'/haschildren' 
+        this.$router.push({ path: currentRouter })
+      } else {
+        currentRouter = currentRouter+'/hasnochild' 
+        this.$router.push({ path: currentRouter })
+      }
+    },
     callback: function(data) {
       if (!data.result) {
         mui.alert('返回的数据为空!!', '提示', '确定')
         return
       }
       this.data = data.result.catalog
+      if (this.data&&!this.data.length) {
+        this.isNofile = true
+      }
     },
     error: function(err) {
       mui.alert('访问数据失败!', '提示', '确定')
     }
   },
   components: {
-    ScrollWrapper: libraryComponents.ScrollWrapper,
     LibHeader: libraryComponents.LibHeader,
     ListItem: libraryComponents.ListItem,
     LibToast: libraryComponents.LibToast,
@@ -273,6 +279,10 @@ libraryComponents.SecondPage = {
   data: function() {
     return {
       data: [],
+      options: {
+        click: true
+      },
+      isNofile: false,
       preParentFile: {}
     }
   },
@@ -285,20 +295,6 @@ libraryComponents.SecondPage = {
       return item
     }
   },
-  methods: {
-    clickItem: function(i) {
-      if (this.$router.currentRoute.path === '/index/haschildren/haschildren'){
-        return
-      }
-      var isCatalog = this.data[i].type
-      this.$store.commit(SET_CURRENT_ITEM, this.data[i])
-      if (isCatalog === CATALOG_FILE) {
-        this.$router.push({ path: '/index/haschildren/haschildren'})
-      } else {
-        this.openPDFHandler(i)
-      }
-    },
-  }
 }
 // 三级页面
 
@@ -308,6 +304,10 @@ libraryComponents.ThirdPage = {
   data: function() {
     return {
       data: [],
+      options: {
+        click: true
+      },
+      isNofile: false,
       preParentFile: {}
     }
   },
@@ -320,21 +320,6 @@ libraryComponents.ThirdPage = {
       return item
     }
   },
-  methods: {
-    clickItem: function(i) {
-      if (this.$router.currentRoute.path === '/index/haschildren/haschildren/haschildren'){
-        return
-      }
-      console.log(3)
-      var isCatalog = this.data[i].type
-      this.$store.commit(SET_CURRENT_ITEM, this.data[i])
-      if (isCatalog === CATALOG_FILE) {
-        this.$router.push({ path: '/index/haschildren/haschildren/haschildren' })
-      } else {
-       this.openPDFHandler(i)
-      }
-    }
-  }
 }
 // 四级页面
 libraryComponents.FouthPage = {
@@ -342,7 +327,11 @@ libraryComponents.FouthPage = {
   template:libCommonTemplate,
   data: function() {
     return {
-      data: []
+      data: [],
+      options: {
+        click: true
+      },
+      isNofile: false
     }
   },
   computed: {
@@ -354,20 +343,6 @@ libraryComponents.FouthPage = {
       return item
     }
   },
-  methods: {
-    clickItem: function(i) {
-      if (this.$router.currentRoute.path === '/index/haschildren/haschildren/haschildren/haschildren'){
-        return
-      }
-      var isCatalog = this.data[i].type
-      this.$store.commit(SET_CURRENT_ITEM, this.data[i])
-      if (isCatalog === CATALOG_FILE) {
-        this.$router.push({ path: '/index/haschildren/haschildren/haschildren/haschildren' })
-      } else {
-       this.openPDFHandler(i)
-      }
-    }
-  }
 }
 // 五级页面
 libraryComponents.FivePage = {
@@ -375,7 +350,11 @@ libraryComponents.FivePage = {
   template:libCommonTemplate,
   data: function() {
     return {
-      data: []
+      data: [],
+      options: {
+        click: true
+      },
+      isNofile: false
     }
   },
   computed: {
@@ -385,22 +364,6 @@ libraryComponents.FivePage = {
         mui.alert('没有对应的数据', '提示', '确定')
       }
       return item
-    }
-  },
-  methods: {
-    clickItem: function(i) {
-      if (this.$router.currentRoute.path === '/index/haschildren/haschildren//haschildren/haschildren'){
-        return
-      }
-      var isCatalog = this.data[i].type
-      this.$store.commit(SET_CURRENT_ITEM, this.data[i])
-      if (isCatalog === CATALOG_FILE) {
-        var currentRouter = this.$router.currentRoute.path
-        var nextRouter = currentRouter+'/haschildren' 
-        this.$router.push({ path: nextRouter })
-      } else {
-       this.openPDFHandler(i)
-      }
     }
   }
 }
@@ -409,10 +372,9 @@ libraryComponents.OpenIframe = {
   template:
     '<div class="lib-wrapper">\
     <lib-header :title="getItem.file_name"></lib-header>\
-    <scroll-wrapper><div class="lib-iframe-wrapper"><iframe class="lib-open-iframe" :src="data.file_content"></iframe></div></scroll-wrapper>\
+    <div class="lib-scroll-wrapper"><div class="lib-iframe-wrapper"><iframe class="lib-open-iframe" :src="data.file_content"></iframe></div></div>\
 </div>',
   components: {
-    ScrollWrapper: libraryComponents.ScrollWrapper,
     LibHeader: libraryComponents.LibHeader
   },
   data: function() {
@@ -423,8 +385,8 @@ libraryComponents.OpenIframe = {
   computed: {
     getItem: function() {
       var item = this.$store.getters.currentLib
-      if (_.isEmptyObject) {
-        mui.alert('没有对用的数据', '提示', '确定')
+      if (_.isEmptyObject(item)) {
+        mui.alert('没有对应的数据', '提示', '确定')
       }
       this.data = item
       return item

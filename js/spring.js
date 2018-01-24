@@ -449,6 +449,9 @@
       }
       callNative(params, _isAsync(options))
     },
+    /**
+     * 获取用户信息
+     */
     getUserInfo: function(options, success, error) {
       if (_.isFunction(options)) {
         error = success
@@ -464,6 +467,9 @@
       }
       callNative(params, _isAsync(options))
     },
+    /**
+     * 通过原生调取MA
+     */
     callService: function(options, success, error) {
       if (_.isPlainObject(options) && !_.isEmptyObject(options)) {
         var params = {
@@ -480,6 +486,9 @@
         callNative(params, _isAsync(options))
       }
     },
+    /**
+     * 获取当前地理位置
+     */
     getCurrentPosition: function(options, success, error) {
       if (_.isFunction(options)) {
         error = success
@@ -495,6 +504,9 @@
       }
       callNative(params, _isAsync(options))
     },
+    /**
+     * @param [* object] 扫描,不需要传参数
+     */
     dimension: function(options, success, error) {
       if (_.isFunction(options)) {
         error = success
@@ -542,6 +554,9 @@
         false
       )
     },
+    /**
+     * @param [*object] options: {loadurl: string, filetype:'pdf|ppt|xls',filetitle:string,watermark:string}
+     */
     openPDF: function(options, success, error) {
       if (_.isFunction(options)) {
         error = success

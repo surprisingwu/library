@@ -15,12 +15,28 @@ var libraryRouter = new VueRouter({
                                 {
                                     path: 'haschildren',
                                     component: libraryComponents.FivePage,
-                                }                            
+                                },
+                                {
+                                    path: 'hasnochild',
+                                    component: libraryComponents.OpenIframe
+                                }                                  
                             ]
                         },
+                        {
+                            path: 'hasnochild',
+                            component: libraryComponents.OpenIframe
+                        }      
                     ]
+                },
+                {
+                    path: 'hasnochild',
+                    component: libraryComponents.OpenIframe
                 }               
             ]
+        },
+        {
+            path: 'hasnochild',
+            component: libraryComponents.OpenIframe
         }
     ]
 }) 

@@ -68,6 +68,19 @@ libraryComponents.LibLoading = {
      }
    }     
 }
+libraryComponents.LibSearchBtn = {
+  template: '<div class="lib-searchbtn-wrapper" @click.stop="clickSearch">\
+    <div class="content"><i class="mui-icon mui-icon-search lib-serach-icon"></i><span class="text">搜索</span></div>\
+  </div>',
+  methods: {
+    clickSearch: function(){
+      if (!event._constructed) {
+        return
+      }
+      this.$emit('clicksearchbtn')
+    }
+  }
+}
 libraryComponents.LibHeader = {
   template:
     '<header class="mui-bar mui-bar-nav lib-header">\
@@ -155,9 +168,9 @@ libraryComponents.LibToast = {
                     <div class="lib-toast-content">\
                     <div class="toast-img-wrapper">\
                     <img :src="imgUrl" width="50" height="36" class="lib-toast-img" v-show="postSuccess === \'true\'"/>\
-                    <img :src="imgUrl" width="25" height="36" class="lib-toast-img" v-show="postSuccess === \'error\'"/></div>\
+                    <img :src="imgUrl" width="10" height="50" class="lib-toast-img" v-show="postSuccess === \'error\'"/></div>\
                     <div class="lib-toast-title">{{title}}</div>\
-                    <div class="lib-toast-email">{{email}}</div>\
+                    <div class="lib-toast-email" v-show="postSuccess === \'error\'">{{email}}</div>\
                     </div>\
                 </div>\
             </div></transition>',
@@ -184,6 +197,7 @@ libraryComponents.LibToast = {
   created: function(){
     var user_code = _.getStorage('user_code')
     if (user_code) {
+      user_code = user_code.slice(0,2)+ '**'
       this.email = user_code+'@yonyou.com'
     }
   },
@@ -392,4 +406,50 @@ libraryComponents.OpenIframe = {
       return item
     }
   }
+}
+
+libraryComponents.LibSearchPage = {
+  template: '<div class="lib-wrapper">\
+  <div class="lib-search-header">\
+    <div class="input-wrapper">\
+    <div class="input-content">\
+      <input placeholder="请输入关键字" v-model="inptVal"/>\
+      <i class="search-icon mui-icon mui-icon-search" @click.stop="searchInpt"></i>\
+      <i class="delete-icon" @click.stop="deleteInpt"></i>\
+      </div></div>\
+   <span class="cancel-btn" @click.stop="turnBack">取消</span>\
+  </div>\
+  <div class="scroll-wrapper lib-scroll-wrapper"><cube-scroll :data="data" :options="options">\
+  <div class="lib-search-noresult" v-html="noresult" v-show="isNoresult"></div>\
+  </cube-scroll></div>\
+  </div>',
+  data: function(){
+    return {
+      inptVal:"",
+      data: [] ,
+      isNoresult: false,
+      options: {
+        click: true
+      }
+    }
+  },
+  computed: {
+    noresult: function() {
+      return '没有找到与“ <span style="color:#000">'+ this.inptVal + '</span> ” 相关内容'
+    }
+  },
+  methods: {
+    turnBack: function(){
+      this.$router.back()
+    },
+    searchInpt: function(){
+
+    },
+    deleteInpt: function(){
+      this.inptVal = ""
+    }
+  },
+  components: {
+    LibHeader: libraryComponents.LibHeader
+  },
 }

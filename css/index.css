@@ -47,6 +47,10 @@ li.lib-list-item-wrapper {
     background-color: #efeff4;
 }
 
+.cube-pullup-wrapper {
+    font-size: 15px;
+}
+
 .lib-list-item .lib-img-wrapper {
     display: inline-block;
     margin-right: 14px;
@@ -67,6 +71,33 @@ li.lib-list-item-wrapper {
     background-repeat: no-repeat;
     background-position: 27px center;
     background-size: 18px 18px;
+}
+
+.lib-searchbtn-wrapper {
+    padding: 8px 15px;
+    height: 44px;
+    border-bottom: 1px solid #F7F7F7;
+    background-color: #fff;
+}
+
+.lib-searchbtn-wrapper .content {
+    height: 100%;
+    width: 100%;
+    line-height: 27px;
+    text-align: center;
+    background-color: #efeff4;
+    border-radius: 14px;
+}
+
+.lib-searchbtn-wrapper i.mui-icon.mui-icon-search.lib-serach-icon {
+    font-size: 16px;
+    color: #D0D0D0;
+}
+
+.lib-searchbtn-wrapper span.text {
+    margin-left: 5px;
+    font-size: 14px;
+    color: #8F8F94;
 }
 
 .lib-list-item .lib-type-file {
@@ -333,4 +364,100 @@ iframe.lib-open-iframe {
 .lib-slide-leave-to {
     transform: translateX(100%);
     -webkit-transform: translateX(100%);
+}
+
+
+/* 搜索页面的一些样式 */
+
+.lib-search-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    align-items: center;
+    border-bottom: 1px solid #F7F7F7;
+    background: #fff;
+}
+
+.lib-search-header .input-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 8px 62px 8px 13px;
+}
+
+.lib-search-header span.cancel-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 62px;
+    height: 100%;
+    line-height: 43px;
+    text-align: center;
+    font-size: 17px;
+    color: #000;
+}
+
+.lib-search-header .input-wrapper input {
+    width: 100%;
+    height: 100%;
+    background-color: #F6F6F6;
+    border-radius: 14px;
+}
+
+.lib-search-header .input-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.lib-search-header .input-wrapper input {
+    padding: 0 30px;
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    font-size: 14px;
+    color: #000;
+    background-color: #F6F6F6;
+}
+
+.lib-search-header .input-wrapper input::placeholder {
+    color: #8F8F94;
+}
+
+.lib-search-header i.search-icon.mui-icon.mui-icon-search {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 30px;
+    height: 100%;
+    text-align: center;
+    line-height: 25px;
+    font-size: 15px;
+    color: #D0D0D0;
+}
+
+i.delete-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 100%;
+    background: url(../img/delete-icon.png) no-repeat;
+    background-position: center;
+    background-size: 15px;
+}
+
+.lib-search-noresult {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: #929292;
 }

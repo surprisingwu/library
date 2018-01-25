@@ -5,12 +5,42 @@
     store: libVuexStore,
     mixins: [libMixins.libClickHandler],
     created: function() {
-     _.getUserInfo(this.storeUserInfo,this.getUserInfoErr)
+     // _.getUserInfo(this.storeUserInfo,this.getUserInfoErr)
+     this.data = [
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
+     ]
     },
     data: {
       data: [],
       options: {
-        click: true
+        click: true,
+        pullDownRefresh: {
+          threshold: 90,
+          stop: 40,
+          txt: 'Refresh success'
+        },
+        pullUpLoad: {
+          threshold: 0,
+          txt: {
+            more: 'Load more',
+            noMore: 'No more data'
+          }
+        }
       },
       isShowLoading: true,
       userCode: '',
@@ -29,6 +59,21 @@
       })
      },
     methods: {
+      clickSearchBtn: function(){
+        this.$router.push({path: '/search'})
+      },
+      onPullingDown() {
+        var that = this
+        setTimeout(function(){
+          that.$refs.scroll.forceUpdate()
+        }, 1000)
+      },
+      onPullingUp: function() {
+        var that = this
+        setTimeout(function(){  
+          that.$refs.scroll.forceUpdate(false)
+        }, 1000)
+      },
       openRequestAgain: function(){
         this.isError = false
         this.isShowLoading = true
@@ -38,9 +83,9 @@
         var isCatalog = this.data[i].type
         this.$store.commit(SET_CURRENT_ITEM, this.data[i])
         if (isCatalog === CATALOG_FILE) {
-          this.$router.push({ path: '/index/haschildren' })
+          this.$router.push({ path: '/haschildren' })
         } else {
-         this.$router.push({path: '/index/hasnochild'})
+         this.$router.push({path: '/hasnochild'})
         }
       },
       callback: function(data) {
@@ -110,6 +155,7 @@
       LibLoading: libraryComponents.LibLoading,
       LibNofileImg: libraryComponents.LibNofileImg,
       NetErrImg: libraryComponents.NetErrImg,
+      LibSearchBtn: libraryComponents.LibSearchBtn
     }
   })
 }

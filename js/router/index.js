@@ -1,7 +1,7 @@
 var libraryRouter = new VueRouter({
     routes: [
         {
-            path: '/index/haschildren',
+            path: '/haschildren',
             component: libraryComponents.SecondPage,
             children: [
                 {
@@ -35,8 +35,12 @@ var libraryRouter = new VueRouter({
             ]
         },
         {
-            path: 'hasnochild',
+            path: '/hasnochild',
             component: libraryComponents.OpenIframe
+        },
+        {
+            path: '/search',
+            component: libraryComponents.LibSearchPage
         }
     ]
 }) 

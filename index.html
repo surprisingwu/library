@@ -29,9 +29,10 @@
             <h1 class="mui-title">春耕文库</h1>
         </header>
         <div class="scroll-wrapper vote-main-content">
-            <cube-scroll :data="data" :options="options">
+            <cube-scroll :data="data" :options="options" @pulling-down="onPullingDown" @pulling-up="onPullingUp" ref="scroll">
+                <lib-search-btn @clicksearchbtn="clickSearchBtn"></lib-search-btn>
                 <ul class="mui-table-view mui-table-view-chevron">
-                    <li class="mui-table-view-cell lib-list-item-wrapper" v-for="(item,index) in data" :class='{hideLi:index===data.length-1}'>
+                    <li class="mui-table-view-cell lib-list-item-wrapper" v-for="(item,index) in data">
                         <list-item :data="item" @listitemclick="clickItem(index)" @postemail="postEmail(index)"></list-item>
                     </li>
                 </ul>

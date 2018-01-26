@@ -42,6 +42,7 @@
      },
     methods: {
       clickSearchBtn: function(){
+        debugger
         this.$router.push({path: '/search'})
       },
       onPullingDown() {

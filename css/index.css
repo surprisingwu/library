@@ -24,7 +24,7 @@ li.hideLi {
 
 .vote-main-content {
     position: fixed;
-    top: 44px;
+    top: 88px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -74,6 +74,11 @@ li.lib-list-item-wrapper {
 }
 
 .lib-searchbtn-wrapper {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    right: 0;
+    width: 100%;
     padding: 8px 15px;
     height: 44px;
     border-bottom: 1px solid #F7F7F7;
@@ -402,13 +407,6 @@ iframe.lib-open-iframe {
     color: #000;
 }
 
-.lib-search-header .input-wrapper input {
-    width: 100%;
-    height: 100%;
-    background-color: #F6F6F6;
-    border-radius: 14px;
-}
-
 .lib-search-header .input-content {
     position: relative;
     width: 100%;
@@ -419,6 +417,7 @@ iframe.lib-open-iframe {
     padding: 0 30px;
     width: 100%;
     height: 100%;
+    border: none;
     border-radius: 14px;
     font-size: 14px;
     color: #000;

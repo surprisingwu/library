@@ -304,23 +304,6 @@ libraryComponents.LibSearchLoading = {
 // 二级页面
 libraryComponents.SecondPage = {
   mixins: [libMixins.libClickHandler,libMixins.commonComponents], 
-  template: '<div class="lib-wrapper">\
-  <lib-header :title="preParentFile.file_name"></lib-header>\
-  <div class="scroll-wrapper lib-scroll-wrapper"><cube-scroll :data="data" :options="options">\
-  <lib-search-btn @clicksearchbtn="clickSearchBtn"></lib-search-btn>\
-  <ul class="mui-table-view mui-table-view-chevron">\
-  <li class="mui-table-view-cell lib-list-item-wrapper" v-for="(item,index) in data">\
-      <list-item :data="item" @listitemclick="clickItem(index)" @postemail="postEmail(index)"></list-item>\
-  </li></ul></cube-scroll></div>\
-  <div class="lib-nofile-container" v-show="isNofile"><lib-nofile-img></lib-nofile-img></div>\
-  <lib-toast ref="libToast" title="发送成功" post-success="true" img-url="img/success@2x.png"></lib-toast>\
-  <lib-toast ref="libToastError" img-url="img/error@2x.png" post-success="error" title="发送失败"></lib-toast>\
-  <keep-alive>\
-      <transition name="lib-slide">\
-          <router-view></router-view>\
-      </transition>\
-  </keep-alive>\
-  </div>',
   data: function() {
     return {
       data: [],
@@ -453,7 +436,7 @@ libraryComponents.LibSearchPage = {
   <div class="lib-search-header">\
     <div class="input-wrapper">\
     <div class="input-content">\
-      <input placeholder="请输入关键字" v-model="inptVal" ref="inpt"/>\
+      <input placeholder="请输入关键字" type="text" v-model="inptVal" ref="inpt" @click="inptClick"/>\
       <i class="search-icon mui-icon mui-icon-search"></i>\
       <i class="delete-icon" @click.stop="deleteInpt"></i>\
       </div></div>\
@@ -494,7 +477,10 @@ libraryComponents.LibSearchPage = {
     }
   },
   mounted: function(){
-    this.$refs.inpt.focus()
+    var that = this
+    setTimeout(function(){
+      that.$refs.inpt.click()
+    },20)
   },
   computed: {
     noresult: function() {
@@ -504,6 +490,9 @@ libraryComponents.LibSearchPage = {
   methods: {
     onPullingUp: function() {
      this.getRetData()
+    },
+    inptClick: function(){
+      this.$refs.inpt.focus()
     },
     clickItem: function(i) {
       this.$refs.inpt.blur()
@@ -565,7 +554,6 @@ libraryComponents.LibSearchPage = {
   watch: {
     inptVal: function(newVal){
       clearTimeout(this.timerIdL)
-      clearTimeout(this.timerId)
       this.isNoresult = false
       this.pageindex = 1
       this.data = []
@@ -575,11 +563,12 @@ libraryComponents.LibSearchPage = {
       
       var that = this
       this.timerIdL = setTimeout(function(){
+        clearTimeout(this.timerId)
         that.isShowLoading = true
+        this.timerId = setTimeout(function(){
+          that.getRetData()
+        },200)
       },200)
-      this.timerId = setTimeout(function(){
-        that.getRetData()
-      },500)
     }
   },
   components: {

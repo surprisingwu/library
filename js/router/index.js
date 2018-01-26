@@ -31,6 +31,60 @@ var libraryRouter = new VueRouter({
                 {
                     path: 'hasnochild',
                     component: libraryComponents.OpenIframe
+                },
+                {
+                    path: 'search',
+                    component: libraryComponents.LibSearchPage,
+                    children: [
+                        {
+                            path: 'haschildren',
+                            component: libraryComponents.FivePage,
+                            children: [
+                                {
+                                    path: 'haschildren',
+                                    component: libraryComponents.FivePage,
+                                    children: [
+                                        {
+                                            path: 'haschildren',
+                                            component: libraryComponents.FivePage,
+                                            children: [
+                                                {
+                                                    path: 'haschildren',
+                                                    component: libraryComponents.FivePage,
+                                                    children: [
+                                                        {
+                                                            path: 'haschildren',
+                                                            component: libraryComponents.FivePage,
+                                                        },
+                                                        {
+                                                            path: 'hasnochild',
+                                                            component: libraryComponents.OpenIframe
+                                                        }                                  
+                                                    ]
+                                                },
+                                                {
+                                                    path: 'hasnochild',
+                                                    component: libraryComponents.OpenIframe
+                                                }                                  
+                                            ]
+                                        },
+                                        {
+                                            path: 'hasnochild',
+                                            component: libraryComponents.OpenIframe
+                                        }                                  
+                                    ]
+                                },
+                                {
+                                    path: 'hasnochild',
+                                    component: libraryComponents.OpenIframe
+                                }                                  
+                            ]
+                        },
+                        {
+                            path: 'hasnochild',
+                            component: libraryComponents.OpenIframe
+                        }                                  
+                    ]
                 }               
             ]
         },
@@ -40,7 +94,57 @@ var libraryRouter = new VueRouter({
         },
         {
             path: '/search',
-            component: libraryComponents.LibSearchPage
+            component: libraryComponents.LibSearchPage,
+            children: [
+                {
+                    path: 'haschildren',
+                    component: libraryComponents.FivePage,
+                    children: [
+                        {
+                            path: 'haschildren',
+                            component: libraryComponents.FivePage,
+                            children: [
+                                {
+                                    path: 'haschildren',
+                                    component: libraryComponents.FivePage,
+                                    children: [
+                                        {
+                                            path: 'haschildren',
+                                            component: libraryComponents.FivePage,
+                                            children: [
+                                                {
+                                                    path: 'haschildren',
+                                                    component: libraryComponents.FivePage,
+                                                },
+                                                {
+                                                    path: 'hasnochild',
+                                                    component: libraryComponents.OpenIframe
+                                                }                                  
+                                            ]
+                                        },
+                                        {
+                                            path: 'hasnochild',
+                                            component: libraryComponents.OpenIframe
+                                        }                                  
+                                    ]
+                                },
+                                {
+                                    path: 'hasnochild',
+                                    component: libraryComponents.OpenIframe
+                                }                                  
+                            ]
+                        },
+                        {
+                            path: 'hasnochild',
+                            component: libraryComponents.OpenIframe
+                        }                                  
+                    ]
+                },
+                {
+                    path: 'hasnochild',
+                    component: libraryComponents.OpenIframe
+                }                                  
+            ]
         }
     ]
 }) 

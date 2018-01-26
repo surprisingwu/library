@@ -104,7 +104,7 @@ libraryComponents.ListItem = {
     '<div @click.stop="clickItem" class="lib-list-item">\
         <div class="lib-img-wrapper" :class="libGetCls"></div>\
         <div class="lib-img-content">\
-            <h2 class="title">{{data.file_name}}</h2>\
+            <h2 class="title" v-html="getFileName"></h2>\
             <span class="time">{{getFormatTime}}</span>\
         </div>\
         <i class="lib-right-icon" :class="libGetArrowCls" @click.stop="handlerEamil"></i>\
@@ -114,8 +114,18 @@ libraryComponents.ListItem = {
       type: Object,
       default: {}
     },
+    searchval: ''
   },
   computed: {
+    getFileName: function(){
+      var name= this.data.file_name
+      if (this.searchval) {
+        var reg = new RegExp(this.searchval,'g')
+        var markName = "<span style= 'color:#EB6964'>"+this.searchval+"</span>"
+         name = name.replace(reg,markName)
+      }
+      return name
+    },
     libGetCls: function() {
       var type = this.data.type,
         prefixSty = 'lib-type-'
@@ -286,10 +296,31 @@ libMixins.commonComponents = {
     LibNofileImg: libraryComponents.LibNofileImg
   }
 }
+libraryComponents.LibSearchLoading = {
+  template: '<div class="lib-search-loading-wrapper">\
+  <img src="img/loading.gif" width="24" height="24"><span class="text">努力搜索中...</span>\
+  </div>'
+}
 // 二级页面
 libraryComponents.SecondPage = {
   mixins: [libMixins.libClickHandler,libMixins.commonComponents], 
-  template: libCommonTemplate,
+  template: '<div class="lib-wrapper">\
+  <lib-header :title="preParentFile.file_name"></lib-header>\
+  <div class="scroll-wrapper lib-scroll-wrapper"><cube-scroll :data="data" :options="options">\
+  <lib-search-btn @clicksearchbtn="clickSearchBtn"></lib-search-btn>\
+  <ul class="mui-table-view mui-table-view-chevron">\
+  <li class="mui-table-view-cell lib-list-item-wrapper" v-for="(item,index) in data">\
+      <list-item :data="item" @listitemclick="clickItem(index)" @postemail="postEmail(index)"></list-item>\
+  </li></ul></cube-scroll></div>\
+  <div class="lib-nofile-container" v-show="isNofile"><lib-nofile-img></lib-nofile-img></div>\
+  <lib-toast ref="libToast" title="发送成功" post-success="true" img-url="img/success@2x.png"></lib-toast>\
+  <lib-toast ref="libToastError" img-url="img/error@2x.png" post-success="error" title="发送失败"></lib-toast>\
+  <keep-alive>\
+      <transition name="lib-slide">\
+          <router-view></router-view>\
+      </transition>\
+  </keep-alive>\
+  </div>',
   data: function() {
     return {
       data: [],
@@ -309,6 +340,14 @@ libraryComponents.SecondPage = {
       return item
     }
   },
+  methods: {
+    clickSearchBtn: function(){
+      this.$router.push({path: '/haschildren/search'})
+    }
+  },
+  components:{
+    LibSearchBtn: libraryComponents.LibSearchBtn
+  }
 }
 // 三级页面
 
@@ -409,29 +448,53 @@ libraryComponents.OpenIframe = {
 }
 
 libraryComponents.LibSearchPage = {
+  mixins: [libMixins.libClickHandler],
   template: '<div class="lib-wrapper">\
   <div class="lib-search-header">\
     <div class="input-wrapper">\
     <div class="input-content">\
-      <input placeholder="请输入关键字" v-model="inptVal"/>\
-      <i class="search-icon mui-icon mui-icon-search" @click.stop="searchInpt"></i>\
+      <input placeholder="请输入关键字" v-model="inptVal" ref="inpt"/>\
+      <i class="search-icon mui-icon mui-icon-search"></i>\
       <i class="delete-icon" @click.stop="deleteInpt"></i>\
       </div></div>\
    <span class="cancel-btn" @click.stop="turnBack">取消</span>\
   </div>\
-  <div class="scroll-wrapper lib-scroll-wrapper"><cube-scroll :data="data" :options="options">\
+  <div class="scroll-wrapper lib-scroll-wrapper"><cube-scroll ref="scroll" :data="data" :options="options" @pulling-up="onPullingUp">\
+  <ul class="mui-table-view mui-table-view-chevron" v-show="data&&data.length">\
+    <li class="mui-table-view-cell lib-list-item-wrapper" v-for="(item,index) in data">\
+      <list-item :data="item" :searchval="inptVal" @listitemclick="clickItem(index)" @postemail="postEmail(index)"></list-item>\
+    </li>\
+  </ul>\
   <div class="lib-search-noresult" v-html="noresult" v-show="isNoresult"></div>\
+  <div class="search-loading-wrapper" v-show="isShowLoading"><lib-search-loading></lib-search-loading></div>\
   </cube-scroll></div>\
+  <keep-alive>\
+  <transition name="lib-slide">\
+      <router-view></router-view>\
+  </transition>\
+</keep-alive>\
   </div>',
   data: function(){
     return {
       inptVal:"",
+      isShowLoading: false,
       data: [] ,
+      pageindex: 1,
       isNoresult: false,
       options: {
-        click: true
+        click: true,
+        pullUpLoad: {
+          threshold: 0,
+          txt: {
+            more: '',
+            noMore: ''
+          }
+        }
       }
     }
+  },
+  mounted: function(){
+    this.$refs.inpt.focus()
   },
   computed: {
     noresult: function() {
@@ -439,17 +502,89 @@ libraryComponents.LibSearchPage = {
     }
   },
   methods: {
-    turnBack: function(){
-      this.$router.back()
+    onPullingUp: function() {
+     this.getRetData()
     },
-    searchInpt: function(){
-
+    clickItem: function(i) {
+      this.$refs.inpt.blur()
+      var isCatalog = this.data[i].type
+      this.$store.commit(SET_CURRENT_ITEM, this.data[i])
+      var currentRouter = this.$router.currentRoute.path
+      if (isCatalog === CATALOG_FILE) {
+        currentRouter = currentRouter+'/haschildren' 
+        this.$router.push({ path: currentRouter })
+      } else {
+        currentRouter = currentRouter+'/hasnochild' 
+        this.$router.push({ path: currentRouter })
+      }
+    },
+    turnBack: function(){
+      this.$refs.inpt.blur()
+      this.$router.back()
     },
     deleteInpt: function(){
       this.inptVal = ""
+    },
+    getRetData: function(){
+      _.getData(
+        {
+          appid: 'library',
+          action: 'handler',
+          params: {
+            transtype: 'selectfile',
+            select_file: this.inptVal,
+            pageindex: this.pageindex
+          }
+        },
+        this.callback,
+        this.error
+      )
+    },
+    callback: function(data){
+      this.isShowLoading = false
+     
+      data = data.result.data
+      if (data.length) {
+        this.pageindex++
+        this.isNoresult = false
+        this.data = this.data.concat(data)
+      } else {
+        if (this.pageindex === 1) {
+          this.isNoresult = true
+        } else {
+           mui.toast('没有更多的数据了!')
+          this.$refs.scroll.forceUpdate(false)   
+        }       
+      }
+    },
+    error: function(err){
+      this.isShowLoading = false
+      mui.alert('访问数据失败!', '提示', '确定')
+    }
+  },
+  watch: {
+    inptVal: function(newVal){
+      clearTimeout(this.timerIdL)
+      clearTimeout(this.timerId)
+      this.isNoresult = false
+      this.pageindex = 1
+      this.data = []
+      if(!this.inptVal){
+        return
+      }
+      
+      var that = this
+      this.timerIdL = setTimeout(function(){
+        that.isShowLoading = true
+      },200)
+      this.timerId = setTimeout(function(){
+        that.getRetData()
+      },500)
     }
   },
   components: {
-    LibHeader: libraryComponents.LibHeader
+    LibHeader: libraryComponents.LibHeader,
+    LibSearchLoading: libraryComponents.LibSearchLoading,
+    ListItem: libraryComponents.ListItem
   },
 }

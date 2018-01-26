@@ -5,25 +5,7 @@
     store: libVuexStore,
     mixins: [libMixins.libClickHandler],
     created: function() {
-     // _.getUserInfo(this.storeUserInfo,this.getUserInfoErr)
-     this.data = [
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-      {type: 'catalog',file_name: '测试文价夹',filetime: {time: Date.now()}},
-     ]
+     _.getUserInfo(this.storeUserInfo,this.getUserInfoErr)
     },
     data: {
       data: [],
@@ -37,8 +19,8 @@
         pullUpLoad: {
           threshold: 0,
           txt: {
-            more: 'Load more',
-            noMore: 'No more data'
+            more: '',
+            noMore: ''
           }
         }
       },
@@ -65,13 +47,15 @@
       onPullingDown() {
         var that = this
         setTimeout(function(){
-          that.$refs.scroll.forceUpdate()
+          mui.toast('刷新成功!')
+         that.$refs.scroll.forceUpdate()
         }, 1000)
       },
       onPullingUp: function() {
         var that = this
         setTimeout(function(){  
-          that.$refs.scroll.forceUpdate(false)
+          mui.toast('没有更多的数据了!')
+          that.$refs.scroll.forceUpdate(false)    
         }, 1000)
       },
       openRequestAgain: function(){
@@ -95,9 +79,8 @@
         }
         data = data.result.catalog
         // 为了让横屏也可以滚动,加一个空的文件夹
-        var temp = {file_type: 'catalog',file_name: '空文价夹',filetime: {time: Date.now()}}
+        // var temp = {file_type: 'catalog',file_name: '空文价夹',filetime: {time: Date.now()}}
         this.data = data
-        this.data.push(temp)
         if (!(data&&this.data.length)){
           this.isNoFile = true
         }

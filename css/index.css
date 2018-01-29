@@ -24,11 +24,15 @@ li.hideLi {
 
 .vote-main-content {
     position: fixed;
-    top: 88px;
+    top: 44px;
     left: 0;
     right: 0;
     bottom: 0;
     padding-top: 0;
+}
+
+.top-44 {
+    top: 44px;
 }
 
 header.lib-header {
@@ -74,8 +78,8 @@ li.lib-list-item-wrapper {
 }
 
 .lib-searchbtn-wrapper {
-    position: fixed;
-    top: 44px;
+    position: absolute;
+    top: 0;
     left: 0;
     right: 0;
     width: 100%;

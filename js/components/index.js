@@ -129,7 +129,7 @@ libraryComponents.ListItem = {
     libGetCls: function() {
       var type = this.data.type,
         prefixSty = 'lib-type-'
-      if (type === 'file') {
+      if (type === 'file' || type === undefined) {
         var fileType = this.data['file_type']
         return prefixSty + libFileType[fileType]
       }
@@ -233,7 +233,8 @@ libraryComponents.NetErrImg = {
 var libCommonTemplate =  '<div class="lib-wrapper">\
 <lib-header :title="preParentFile.file_name"></lib-header>\
 <div class="scroll-wrapper lib-scroll-wrapper"><cube-scroll :data="data" :options="options">\
-<ul class="mui-table-view mui-table-view-chevron">\
+<lib-search-btn @clicksearchbtn="clickSearchBtn"></lib-search-btn>\
+<ul class="mui-table-view mui-table-view-chevron top-44">\
 <li class="mui-table-view-cell lib-list-item-wrapper" v-for="(item,index) in data">\
     <list-item :data="item" @listitemclick="clickItem(index)" @postemail="postEmail(index)"></list-item>\
 </li></ul></cube-scroll></div>\
@@ -263,6 +264,11 @@ libMixins.commonComponents = {
     this.preParentFile = this.getItem||{}
   },
   methods: {
+    clickSearchBtn: function(){
+      var currentRouter = this.$router.currentRoute.path
+      currentRouter = currentRouter+"/search"
+      this.$router.push({path: currentRouter})
+    },
     clickItem: function(i) {
       var isCatalog = this.data[i].type
       this.$store.commit(SET_CURRENT_ITEM, this.data[i])
@@ -293,7 +299,8 @@ libMixins.commonComponents = {
     LibHeader: libraryComponents.LibHeader,
     ListItem: libraryComponents.ListItem,
     LibToast: libraryComponents.LibToast,
-    LibNofileImg: libraryComponents.LibNofileImg
+    LibNofileImg: libraryComponents.LibNofileImg,
+    LibSearchBtn: libraryComponents.LibSearchBtn
   }
 }
 libraryComponents.LibSearchLoading = {
@@ -304,6 +311,7 @@ libraryComponents.LibSearchLoading = {
 // 二级页面
 libraryComponents.SecondPage = {
   mixins: [libMixins.libClickHandler,libMixins.commonComponents], 
+  template: libCommonTemplate,
   data: function() {
     return {
       data: [],
@@ -420,6 +428,7 @@ libraryComponents.OpenIframe = {
   },
   computed: {
     getItem: function() {
+      debugger
       var item = this.$store.getters.currentLib
       if (_.isEmptyObject(item)) {
         mui.alert('没有对应的数据', '提示', '确定')

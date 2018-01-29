@@ -19,12 +19,32 @@ var libraryRouter = new VueRouter({
                                 {
                                     path: 'hasnochild',
                                     component: libraryComponents.OpenIframe
+                                },
+                                {
+                                    path: 'search',
+                                    component: libraryComponents.LibSearchPage,
+                                    children: [
+                                        {
+                                            path: 'hasnochild',
+                                            component: libraryComponents.OpenIframe
+                                        }                                  
+                                    ]
                                 }                                  
                             ]
                         },
                         {
                             path: 'hasnochild',
                             component: libraryComponents.OpenIframe
+                        },
+                        {
+                            path: 'search',
+                            component: libraryComponents.LibSearchPage,
+                            children: [
+                                {
+                                    path: 'hasnochild',
+                                    component: libraryComponents.OpenIframe
+                                }                                  
+                            ]
                         }      
                     ]
                 },
@@ -37,109 +57,22 @@ var libraryRouter = new VueRouter({
                     component: libraryComponents.LibSearchPage,
                     children: [
                         {
-                            path: 'haschildren',
-                            component: libraryComponents.FivePage,
-                            children: [
-                                {
-                                    path: 'haschildren',
-                                    component: libraryComponents.FivePage,
-                                    children: [
-                                        {
-                                            path: 'haschildren',
-                                            component: libraryComponents.FivePage,
-                                            children: [
-                                                {
-                                                    path: 'haschildren',
-                                                    component: libraryComponents.FivePage,
-                                                    children: [
-                                                        {
-                                                            path: 'haschildren',
-                                                            component: libraryComponents.FivePage,
-                                                        },
-                                                        {
-                                                            path: 'hasnochild',
-                                                            component: libraryComponents.OpenIframe
-                                                        }                                  
-                                                    ]
-                                                },
-                                                {
-                                                    path: 'hasnochild',
-                                                    component: libraryComponents.OpenIframe
-                                                }                                  
-                                            ]
-                                        },
-                                        {
-                                            path: 'hasnochild',
-                                            component: libraryComponents.OpenIframe
-                                        }                                  
-                                    ]
-                                },
-                                {
-                                    path: 'hasnochild',
-                                    component: libraryComponents.OpenIframe
-                                }                                  
-                            ]
-                        },
-                        {
                             path: 'hasnochild',
                             component: libraryComponents.OpenIframe
                         }                                  
                     ]
-                }               
+                }             
             ]
         },
         {
             path: '/hasnochild',
             component: libraryComponents.OpenIframe
         },
+        // 搜索页面,直接搜索文档
         {
             path: '/search',
             component: libraryComponents.LibSearchPage,
             children: [
-                {
-                    path: 'haschildren',
-                    component: libraryComponents.FivePage,
-                    children: [
-                        {
-                            path: 'haschildren',
-                            component: libraryComponents.FivePage,
-                            children: [
-                                {
-                                    path: 'haschildren',
-                                    component: libraryComponents.FivePage,
-                                    children: [
-                                        {
-                                            path: 'haschildren',
-                                            component: libraryComponents.FivePage,
-                                            children: [
-                                                {
-                                                    path: 'haschildren',
-                                                    component: libraryComponents.FivePage,
-                                                },
-                                                {
-                                                    path: 'hasnochild',
-                                                    component: libraryComponents.OpenIframe
-                                                }                                  
-                                            ]
-                                        },
-                                        {
-                                            path: 'hasnochild',
-                                            component: libraryComponents.OpenIframe
-                                        }                                  
-                                    ]
-                                },
-                                {
-                                    path: 'hasnochild',
-                                    component: libraryComponents.OpenIframe
-                                }                                  
-                            ]
-                        },
-                        {
-                            path: 'hasnochild',
-                            component: libraryComponents.OpenIframe
-                        }                                  
-                    ]
-                },
                 {
                     path: 'hasnochild',
                     component: libraryComponents.OpenIframe

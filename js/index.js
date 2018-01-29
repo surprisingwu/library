@@ -5,6 +5,15 @@
     store: libVuexStore,
     mixins: [libMixins.libClickHandler],
     created: function() {
+      // 用来测试
+      // _.setConfig(
+      //   // 'ifbpmob.yonyou.com',
+      //   '10.4.121.30',
+      //   // '8030',
+      //   '8130',
+      //   'com.ifbpmob.jrpt.controller.FileController'
+      // )
+      // this.getData()
      _.getUserInfo(this.storeUserInfo,this.getUserInfoErr)
     },
     data: {
@@ -42,7 +51,6 @@
      },
     methods: {
       clickSearchBtn: function(){
-        debugger
         this.$router.push({path: '/search'})
       },
       onPullingDown() {
@@ -79,8 +87,6 @@
           return
         }
         data = data.result.catalog
-        // 为了让横屏也可以滚动,加一个空的文件夹
-        // var temp = {file_type: 'catalog',file_name: '空文价夹',filetime: {time: Date.now()}}
         this.data = data
         if (!(data&&this.data.length)){
           this.isNoFile = true
@@ -111,21 +117,24 @@
             port,
             'com.ifbpmob.jrpt.controller.FileController'
           )
-          _.getData(
-            {
-              appid: 'library',
-              action: 'handler',
-              params: {
-                transtype: 'cataloglist',
-                catalog_id: ''
-              }
-            },
-            this.callback,
-            this.error
-          )
+          this.getData()
         }
         this.userCode = user_code+'@yonyou.com'
         _.setStorage('user_code',user_code)
+      },
+      getData: function(){
+        _.getData(
+          {
+            appid: 'library',
+            action: 'handler',
+            params: {
+              transtype: 'cataloglist',
+              catalog_id: ''
+            }
+          },
+          this.callback,
+          this.error
+        )
       },
       getUserInfoErr: function(e) {
         this.isShowLoading = false

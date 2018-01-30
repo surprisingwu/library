@@ -5,16 +5,13 @@
     store: libVuexStore,
     mixins: [libMixins.libClickHandler],
     created: function() {
-      // 用来测试
+     // 用来测试
       // _.setConfig(
-      //   // 'ifbpmob.yonyou.com',
-      //   '10.4.121.30',
-      //   // '8030',
-      //   '8130',
+      // 'ifbpmob.yonyou.com','8030',
       //   'com.ifbpmob.jrpt.controller.FileController'
       // )
       // this.getData()
-     _.getUserInfo(this.storeUserInfo,this.getUserInfoErr)
+    _.getUserInfo(this.storeUserInfo,this.getUserInfoErr)
     },
     data: {
       data: [],
@@ -26,7 +23,7 @@
           txt: 'Refresh success'
         },
         pullUpLoad: {
-          threshold: 0,
+          threshold: 40,
           txt: {
             more: '',
             noMore: ''
@@ -57,14 +54,14 @@
         var that = this
         setTimeout(function(){
           mui.toast('刷新成功!')
-         that.$refs.scroll.forceUpdate()
+         that.$refs.scroll.forceUpdate(false)
         }, 1000)
       },
       onPullingUp: function() {
         var that = this
         setTimeout(function(){  
           mui.toast('没有更多的数据了!')
-          that.$refs.scroll.forceUpdate(false)    
+          that.$refs.scroll.forceUpdate(false)   
         }, 1000)
       },
       openRequestAgain: function(){

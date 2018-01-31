@@ -23,7 +23,7 @@
           txt: 'Refresh success'
         },
         pullUpLoad: {
-          threshold: 40,
+          threshold: 0,
           txt: {
             more: '',
             noMore: ''
@@ -54,7 +54,7 @@
         var that = this
         setTimeout(function(){
           mui.toast('刷新成功!')
-         that.$refs.scroll.forceUpdate(false)
+         that.$refs.scroll.forceUpdate()
         }, 1000)
       },
       onPullingUp: function() {

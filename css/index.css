@@ -521,7 +521,9 @@ span.vote-header-right {
 }
 
 i.lib-right-icon.mui-icon.mui-icon-arrowright.lib-arrow-right {
-    text-align: center;
+    padding-right: 10px;
+    text-align: right;
     line-height: 64px;
+    font-size: 18px;
     color: #CCC;
 }

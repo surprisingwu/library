@@ -390,18 +390,26 @@
     },
     // 访问ma,需先设置ip和端口,以及ma的controller
     setConfig: function(ip, port, controller) {
-      this.ip = ip
+      this.ip =ip
       this.port = port
       this.controller = controller
+      var params = {
+        ip: ip,
+        port: port,
+        controller: controller
+      }   
+      this.setStorage('setConfig',JSON.stringify(params))
     },
     openHttps: function() {
       this.isHttps = true
     },
     // 用来请求ma的
     getData: function(options, success, err) {
-      if (!(this.ip && this.port && this.controller)) {
-        throw new Error('请先设置MA的ip、port、和controller！')
-      }
+     
+    var setconfig= JSON.parse(this.getStorage('setConfig'))
+    if (!(setconfig.ip && setconfig.port && setconfig.controller)) {
+      throw new Error('请先设置MA的ip、port、和controller！')
+    }
       this.appid = this._checkAttribute(options, 'appid', 'test')
       this.action = this._checkAttribute(options, 'action', 'handler')
       if (this.isMobile()) {
@@ -412,7 +420,8 @@
     },
     // options: {action: "",params:{},sucess: fn,error: fn,timeout: num}
     callAction: function(options, success, error) {
-      writeConfig(this.ip, this.port)
+      var setconfig= JSON.parse(this.getStorage('setConfig'))
+      writeConfig(setconfig.ip,setconfig.port)
       summer.callAction(this._handleParams(options, success, error))
     },
     openAlbum: function(options, success, error) {

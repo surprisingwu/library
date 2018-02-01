@@ -141,11 +141,12 @@
     },
     components: {
       ListItem: libraryComponents.ListItem,
-      LibToast: libraryComponents.LibToast,
       LibLoading: libraryComponents.LibLoading,
       LibNofileImg: libraryComponents.LibNofileImg,
       NetErrImg: libraryComponents.NetErrImg,
-      LibSearchBtn: libraryComponents.LibSearchBtn
+      LibSearchBtn: libraryComponents.LibSearchBtn,
+      LibPostErr: libraryComponents.LibPostErr,
+      LibPostSucc: libraryComponents.LibPostSucc
     }
   })
 }

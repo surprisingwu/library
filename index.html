@@ -47,8 +47,8 @@
         <div class="lib-loading-wrapper" v-show="!data.length&&isShowLoading">
             <lib-loading></lib-loading>
         </div>
-        <lib-toast ref='libToast' title="发送成功" post-success="true" img-url="img/success@2x.png"></lib-toast>
-        <lib-toast ref='libToastError' img-url="img/error@2x.png" post-success="error" title="发送失败"></lib-toast>
+        <lib-post-err ref="postError"></lib-post-err>
+        <lib-post-succ ref="postSuccess"></lib-post-succ>
         <keep-alive>
             <transition name="lib-slide">
                 <router-view></router-view>

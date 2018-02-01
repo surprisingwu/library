@@ -22,7 +22,7 @@ libMixins.libClickHandler = {
       mui.alert('打开该文件失败!', '提示', '确定')
     },
     postEmail: function(i) {
-      var data = _.type(this.data) === 'array'?this.data[i] : this.data
+      var data = _.type(this.data) === 'array' ? this.data[i] : this.data
       var content_id = data.content_id
       var user_code = _.getStorage('user_code')
       _.getData(
@@ -40,40 +40,42 @@ libMixins.libClickHandler = {
       )
     },
     postMailSuc: function(data) {
-      var lbToast = this.$refs.libToast
-      lbToast.showToast()
+      var lbToast = this.$refs.postSuccess
+      lbToast.show()
       setTimeout(function() {
-        lbToast.hideToast()
+        lbToast.hide()
       }, 2000)
     },
     postMailErr: function(err) {
-      var lbToast = this.$refs.libToastError
-      lbToast.showToast()
+      var lbToast = this.$refs.postError
+      lbToast.show()
       setTimeout(function() {
-        lbToast.hideToast()
+        lbToast.hide()
       }, 2000)
     }
   }
 }
 libraryComponents.LibLoading = {
-  template: '<div class="lib-loading">\
+  template:
+    '<div class="lib-loading">\
               <img src="img/loading.gif" width="24" height="24">\
               <p class="lib-loading-desc">{{title}}</p>\
         </div>',
 
-   props: {
-     title: {
-       type: String,
-       default: '正在载入 ...'
-     }
-   }     
+  props: {
+    title: {
+      type: String,
+      default: '正在载入 ...'
+    }
+  }
 }
 libraryComponents.LibSearchBtn = {
-  template: '<div class="lib-searchbtn-wrapper" @click.stop="clickSearch">\
+  template:
+    '<div class="lib-searchbtn-wrapper" @click.stop="clickSearch">\
     <div class="content"><i class="mui-icon mui-icon-search lib-serach-icon"></i><span class="text">搜索</span></div>\
   </div>',
   methods: {
-    clickSearch: function(){
+    clickSearch: function() {
       if (!event._constructed) {
         return
       }
@@ -106,7 +108,7 @@ libraryComponents.LibHeader = {
     turnBack: function() {
       this.$router.back()
     },
-    clickRight: function(){
+    clickRight: function() {
       this.$emit('clickright')
     }
   }
@@ -129,12 +131,13 @@ libraryComponents.ListItem = {
     searchval: ''
   },
   computed: {
-    getFileName: function(){
-      var name= this.data.file_name
+    getFileName: function() {
+      var name = this.data.file_name
       if (this.searchval) {
-        var reg = new RegExp(this.searchval,'g')
-        var markName = "<span style= 'color:#EB6964'>"+this.searchval+"</span>"
-         name = name.replace(reg,markName)
+        var reg = new RegExp(this.searchval, 'g')
+        var markName =
+          "<span style= 'color:#EB6964'>" + this.searchval + '</span>'
+        name = name.replace(reg, markName)
       }
       return name
     },
@@ -183,66 +186,88 @@ libraryComponents.ListItem = {
     }
   }
 }
-libraryComponents.LibToast = {
+libraryComponents.LibPostErr = {
   template:
-    '<transition name="lib-toast"><div class="lib-wrapper-s" v-show="isShowToast"> \
+    '<transition name="lib-toast"><div class="lib-wrapper-s" v-show="isShow"> \
+  <div class="lib-toast-wrapper"> \
+      <div class="lib-toast-content">\
+        <div class="toast-img-wrapper">\
+         <img src="img/error@2x.png" width="10" height="50" class="lib-toast-img"/>\
+        </div>\
+        <div class="lib-toast-title">{{title}}</div>\
+      </div>\
+  </div>\
+</div></transition>',
+  props: {
+    title: {
+      type: String,
+      default: '发送失败 ！'
+    }
+  },
+  data: function() {
+    return {
+      isShow: false
+    }
+  },
+  methods: {
+    show: function() {
+      this.isShow = true
+    },
+    hide: function() {
+      this.isShow = false
+    }
+  }
+}
+libraryComponents.LibPostSucc = {
+  template:
+    '<transition name="lib-toast"><div class="lib-wrapper-s" v-show="isShow"> \
                 <div class="lib-toast-wrapper"> \
                     <div class="lib-toast-content">\
                     <div class="toast-img-wrapper">\
-                    <img :src="imgUrl" width="50" height="36" class="lib-toast-img" v-show="postSuccess === \'true\'"/>\
-                    <img :src="imgUrl" width="10" height="50" class="lib-toast-img" v-show="postSuccess === \'error\'"/></div>\
+                    <img src="img/success@2x.png" width="50" height="36" class="lib-toast-img"/></div>\
                     <div class="lib-toast-title">{{title}}</div>\
-                    <div class="lib-toast-email" v-show="postSuccess === \'true\'">{{email}}</div>\
+                    <div class="lib-toast-email">{{email}}</div>\
                     </div>\
                 </div>\
             </div></transition>',
   props: {
-    imgUrl: {
-      type: String,
-      default: 'img/success@2x.png'
-    },
     title: {
       type: String,
       default: '已发送到'
-    },
-    postSuccess: {
-      type: String,
-      default: 'true'
-    }   
+    }
   },
   data: function() {
     return {
-      isShowToast: false,
+      isShow: false,
       email: 'wu**@yonyou.com'
     }
   },
-  created: function(){
+  created: function() {
     var user_code = _.getStorage('user_code')
     if (user_code) {
-      user_code = user_code.slice(0,2)+ '**'
-      this.email = user_code+'@yonyou.com'
+      user_code = user_code.slice(0, 2) + '**'
+      this.email = user_code + '@yonyou.com'
     }
   },
   methods: {
-    showToast: function() {
-      this.isShowToast = true
+    show: function() {
+      this.isShow = true
     },
-    hideToast: function() {
-      this.isShowToast = false
+    hide: function() {
+      this.isShow = false
     }
   }
 }
 libraryComponents.LibNofileImg = {
-  template:'<div class="lib-nofile-wrapper">\
-         </div>',
-      
+  template: '<div class="lib-nofile-wrapper">\
+         </div>'
 }
 libraryComponents.NetErrImg = {
-  template:'<div class="lib-neterror-wrapper">\
-         </div>',
-      
+  template: '<div class="lib-neterror-wrapper">\
+         </div>'
 }
-var libCommonTemplate =  '<div class="lib-wrapper">\
+var libCommonTemplate =
+  '<div class="lib-wrapper">\
 <lib-header :title="preParentFile.file_name"></lib-header>\
 <div class="scroll-wrapper lib-scroll-wrapper"><cube-scroll :data="data" :options="options">\
 <lib-search-btn @clicksearchbtn="clickSearchBtn"></lib-search-btn>\
@@ -251,14 +276,14 @@ var libCommonTemplate =  '<div class="lib-wrapper">\
     <list-item :data="item" @listitemclick="clickItem(index)" @postemail="postEmail(index)"></list-item>\
 </li></ul></cube-scroll></div>\
 <div class="lib-nofile-container" v-show="isNofile"><lib-nofile-img></lib-nofile-img></div>\
-<lib-toast ref="libToast" title="发送成功" post-success="true" img-url="img/success@2x.png"></lib-toast>\
-<lib-toast ref="libToastError" img-url="img/error@2x.png" post-success="error" title="发送失败"></lib-toast>\
+<lib-post-err ref="postError"></lib-post-err>\
+<lib-post-succ ref="postSuccess"></lib-post-succ>\
 <keep-alive>\
     <transition name="lib-slide">\
         <router-view></router-view>\
     </transition>\
 </keep-alive>\
-</div>';
+</div>'
 libMixins.commonComponents = {
   created: function() {
     _.getData(
@@ -273,23 +298,23 @@ libMixins.commonComponents = {
       this.callback,
       this.error
     )
-    this.preParentFile = this.getItem||{}
+    this.preParentFile = this.getItem || {}
   },
   methods: {
-    clickSearchBtn: function(){
+    clickSearchBtn: function() {
       var currentRouter = this.$router.currentRoute.path
-      currentRouter = currentRouter+"/search"
-      this.$router.push({path: currentRouter})
+      currentRouter = currentRouter + '/search'
+      this.$router.push({ path: currentRouter })
     },
     clickItem: function(i) {
       var isCatalog = this.data[i].type
       this.$store.commit(SET_CURRENT_ITEM, this.data[i])
       var currentRouter = this.$router.currentRoute.path
       if (isCatalog === CATALOG_FILE) {
-        currentRouter = currentRouter+'/haschildren' 
+        currentRouter = currentRouter + '/haschildren'
         this.$router.push({ path: currentRouter })
       } else {
-        currentRouter = currentRouter+'/hasnochild' 
+        currentRouter = currentRouter + '/hasnochild'
         this.$router.push({ path: currentRouter })
       }
     },
@@ -299,7 +324,7 @@ libMixins.commonComponents = {
         return
       }
       this.data = data.result.catalog
-      if (this.data&&!this.data.length) {
+      if (this.data && !this.data.length) {
         this.isNofile = true
       }
     },
@@ -310,19 +335,21 @@ libMixins.commonComponents = {
   components: {
     LibHeader: libraryComponents.LibHeader,
     ListItem: libraryComponents.ListItem,
-    LibToast: libraryComponents.LibToast,
+    LibPostErr: libraryComponents.LibPostErr,
+    LibPostSucc: libraryComponents.LibPostSucc,
     LibNofileImg: libraryComponents.LibNofileImg,
     LibSearchBtn: libraryComponents.LibSearchBtn
   }
 }
 libraryComponents.LibSearchLoading = {
-  template: '<div class="lib-search-loading-wrapper">\
+  template:
+    '<div class="lib-search-loading-wrapper">\
   <img src="img/loading.gif" width="24" height="24"><span class="text">努力搜索中...</span>\
   </div>'
 }
 // 二级页面
 libraryComponents.SecondPage = {
-  mixins: [libMixins.libClickHandler,libMixins.commonComponents], 
+  mixins: [libMixins.libClickHandler, libMixins.commonComponents],
   template: libCommonTemplate,
   data: function() {
     return {
@@ -344,20 +371,20 @@ libraryComponents.SecondPage = {
     }
   },
   methods: {
-    clickSearchBtn: function(){
+    clickSearchBtn: function() {
       debugger
-      this.$router.push({path: '/haschildren/search'})
+      this.$router.push({ path: '/haschildren/search' })
     }
   },
-  components:{
+  components: {
     LibSearchBtn: libraryComponents.LibSearchBtn
   }
 }
 // 三级页面
 
 libraryComponents.ThirdPage = {
-  mixins: [libMixins.libClickHandler,libMixins.commonComponents],
-  template:libCommonTemplate,
+  mixins: [libMixins.libClickHandler, libMixins.commonComponents],
+  template: libCommonTemplate,
   data: function() {
     return {
       data: [],
@@ -376,12 +403,12 @@ libraryComponents.ThirdPage = {
       }
       return item
     }
-  },
+  }
 }
 // 四级页面
 libraryComponents.FouthPage = {
-  mixins: [libMixins.libClickHandler,libMixins.commonComponents],
-  template:libCommonTemplate,
+  mixins: [libMixins.libClickHandler, libMixins.commonComponents],
+  template: libCommonTemplate,
   data: function() {
     return {
       data: [],
@@ -399,12 +426,12 @@ libraryComponents.FouthPage = {
       }
       return item
     }
-  },
+  }
 }
 // 五级页面
 libraryComponents.FivePage = {
-  mixins: [libMixins.libClickHandler,libMixins.commonComponents],
-  template:libCommonTemplate,
+  mixins: [libMixins.libClickHandler, libMixins.commonComponents],
+  template: libCommonTemplate,
   data: function() {
     return {
       data: [],
@@ -429,16 +456,13 @@ libraryComponents.OpenIframe = {
   mixins: [libMixins.libClickHandler],
   template:
     '<div class="lib-wrapper">\
+      <lib-post-err ref="postError"></lib-post-err>\
+        <lib-post-succ ref="postSuccess"></lib-post-succ>\
     <lib-header :title="getItem.file_name" @clickright="postEmail" :isShowRight="isShowRight"></lib-header>\
-    <div class="lib-scroll-wrapper"><div class="lib-iframe-wrapper"><iframe class="lib-open-iframe" :src="data.file_content"></iframe></div>\
-    <lib-toast ref="libToast" title="发送成功" post-success="true" img-url="img/success@2x.png"></lib-toast>\
-    <lib-toast ref="libToastError" img-url="img/error@2x.png" post-success="error" title="发送失败"></lib-toast>\
+    <div class="lib-scroll-wrapper">\
+    <div class="lib-iframe-wrapper"><iframe class="lib-open-iframe" :src="data.file_content"></iframe></div>\
     </div>\
 </div>',
-  components: {
-    LibHeader: libraryComponents.LibHeader,
-    LibToast: libraryComponents.LibToast,
-  },
   data: function() {
     return {
       data: {},
@@ -447,7 +471,6 @@ libraryComponents.OpenIframe = {
   },
   computed: {
     getItem: function() {
-      debugger
       var item = this.$store.getters.currentLib
       if (_.isEmptyObject(item)) {
         mui.alert('没有对应的数据', '提示', '确定')
@@ -455,16 +478,21 @@ libraryComponents.OpenIframe = {
       this.data = item
       return item
     }
+  },
+  components: {
+    LibHeader: libraryComponents.LibHeader,
+    LibPostErr: libraryComponents.LibPostErr,
+    LibPostSucc: libraryComponents.LibPostSucc
   }
 }
 
 libraryComponents.LibSearchPage = {
-  mixins: [libMixins.libClickHandler],
-  template: '<div class="lib-wrapper">\
+  template:
+    '<div class="lib-wrapper">\
   <div class="lib-search-header">\
     <div class="input-wrapper">\
     <div class="input-content">\
-      <input placeholder="请输入关键字" type="text" v-model="inptVal" ref="inpt" @click="inptClick"/>\
+      <input placeholder="请输入关键字" type="text" v-model="inptVal" ref="inpt"/>\
       <i class="search-icon mui-icon mui-icon-search"></i>\
       <i class="delete-icon" @click.stop="deleteInpt"></i>\
       </div></div>\
@@ -476,20 +504,22 @@ libraryComponents.LibSearchPage = {
       <list-item :data="item" :searchval="inptVal" @listitemclick="clickItem(index)" @postemail="postEmail(index)"></list-item>\
     </li>\
   </ul>\
+  </cube-scroll></div>\
   <div class="lib-search-noresult" v-html="noresult" v-show="isNoresult"></div>\
   <div class="search-loading-wrapper" v-show="isShowLoading"><lib-search-loading></lib-search-loading></div>\
-  </cube-scroll></div>\
+  <lib-post-err ref="postError"></lib-post-err>\
+  <lib-post-succ ref="postSuccess"></lib-post-succ>\
   <keep-alive>\
   <transition name="lib-slide">\
       <router-view></router-view>\
   </transition>\
 </keep-alive>\
   </div>',
-  data: function(){
+  data: function() {
     return {
-      inptVal:"",
+      inptVal: '',
       isShowLoading: false,
-      data: [] ,
+      data: [],
       pageindex: 1,
       isNoresult: false,
       options: {
@@ -504,7 +534,7 @@ libraryComponents.LibSearchPage = {
       }
     }
   },
-  mounted: function(){
+  mounted: function() {
     // var that = this
     // setTimeout(function(){
     //   that.$refs.inpt.click()
@@ -512,19 +542,53 @@ libraryComponents.LibSearchPage = {
   },
   computed: {
     noresult: function() {
-      return '没有找到与“ <span style="color:#000">'+ this.inptVal + '</span> ” 相关内容'
+      return (
+        '没有找到与“ <span style="color:#000">' +
+        this.inptVal +
+        '</span> ” 相关内容'
+      )
     }
   },
   methods: {
+    postEmail: function(i) {
+      var data = _.type(this.data) === 'array' ? this.data[i] : this.data
+      var content_id = data.content_id
+      var user_code = _.getStorage('user_code')
+      _.getData(
+        {
+          appid: 'library',
+          action: 'handler',
+          params: {
+            transtype: 'sendfilemail',
+            content_id: content_id,
+            user_code: user_code
+          }
+        },
+        this.postMailSuc,
+        this.postMailErr
+      )
+    },
+    postMailSuc: function(data) {
+      this.$refs.inpt.blur()
+      var lbToast = this.$refs.postSuccess
+      lbToast.show()
+      setTimeout(function() {
+        lbToast.hide()
+      }, 2000)
+    },
+    postMailErr: function(err) {
+      var lbToast = this.$refs.postError
+      lbToast.show()
+      setTimeout(function() {
+        lbToast.hide()
+      }, 2000)
+    },
     onPullingUp: function() {
-      if (this.data.length>= 15) {
+      if (this.data.length >= 15) {
         this.getRetData()
       } else {
-        this.$refs.scroll.forceUpdate(false)   
+        this.$refs.scroll.forceUpdate(false)
       }
-    },
-    inptClick: function(){
-      this.$refs.inpt.focus()
     },
     clickItem: function(i) {
       this.$refs.inpt.blur()
@@ -532,21 +596,21 @@ libraryComponents.LibSearchPage = {
       this.$store.commit(SET_CURRENT_ITEM, this.data[i])
       var currentRouter = this.$router.currentRoute.path
       if (isCatalog === CATALOG_FILE) {
-        currentRouter = currentRouter+'/haschildren' 
+        currentRouter = currentRouter + '/haschildren'
         this.$router.push({ path: currentRouter })
       } else {
-        currentRouter = currentRouter+'/hasnochild' 
+        currentRouter = currentRouter + '/hasnochild'
         this.$router.push({ path: currentRouter })
       }
     },
-    turnBack: function(){
+    turnBack: function() {
       this.$refs.inpt.blur()
       this.$router.back()
     },
-    deleteInpt: function(){
-      this.inptVal = ""
+    deleteInpt: function() {
+      this.inptVal = ''
     },
-    getRetData: function(){
+    getRetData: function() {
       _.getData(
         {
           appid: 'library',
@@ -561,7 +625,7 @@ libraryComponents.LibSearchPage = {
         this.error
       )
     },
-    callback: function(data){
+    callback: function(data) {
       this.isShowLoading = false
       data = data.result.data
       if (data.length) {
@@ -569,40 +633,42 @@ libraryComponents.LibSearchPage = {
         this.isNoresult = false
         if (this.inptVal) {
           this.data = this.data.concat(data)
-        }    
+        }
       } else {
         if (this.pageindex === 1) {
           this.isNoresult = true
         } else {
-           mui.toast('没有更多的数据了!')   
+          mui.toast('没有更多的数据了!')
         }
-        this.$refs.scroll.forceUpdate(false)       
+        this.$refs.scroll.forceUpdate(false)
       }
     },
-    error: function(err){
+    error: function(err) {
       this.isShowLoading = false
       mui.alert('访问数据失败!', '提示', '确定')
     }
   },
   watch: {
-    inptVal: function(newVal){
+    inptVal: function(newVal) {
       clearTimeout(this.timerIdL)
       var that = this
       this.isNoresult = false
       this.pageindex = 1
       this.data = []
-      this.timerIdL = setTimeout(function(){
-        if(!that.inptVal){
+      this.timerIdL = setTimeout(function() {
+        if (!that.inptVal) {
           return
         }
         that.isShowLoading = true
-          that.getRetData()
-      },300)
+        that.getRetData()
+      }, 300)
     }
   },
   components: {
     LibHeader: libraryComponents.LibHeader,
     LibSearchLoading: libraryComponents.LibSearchLoading,
-    ListItem: libraryComponents.ListItem
-  },
+    ListItem: libraryComponents.ListItem,
+    LibPostErr: libraryComponents.LibPostErr,
+    LibPostSucc: libraryComponents.LibPostSucc
+  }
 }

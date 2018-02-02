@@ -6,8 +6,10 @@
     mixins: [libMixins.libClickHandler],
     created: function() {
      // 用来测试
+       //'ifbpmob.yonyou.com','8030',
       // _.setConfig(
-      // 'ifbpmob.yonyou.com','8030',
+      //  '10.4.121.30','8130',
+      // //  'ifbpmob.yonyou.com','8030',
       //   'com.ifbpmob.jrpt.controller.FileController'
       // )
       // this.getData()

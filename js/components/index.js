@@ -121,7 +121,8 @@ libraryComponents.ListItem = {
             <h2 class="title" v-html="getFileName"></h2>\
             <span class="time">{{getFormatTime}}</span>\
         </div>\
-        <i class="lib-right-icon" :class="libGetArrowCls" @click.stop="handlerEamil"></i>\
+        <span v-if="data.type===\'catalog\'&&data.filenum" class="catalog-file-num">{{data.filenum}}</span>\
+        <i class="lib-right-icon" v-if="data.file_type>=0&&data.mailcontenturl"  :class="libGetArrowCls" @click.stop="handlerEamil"></i>\
     </div>',
   props: {
     data: {
@@ -298,7 +299,6 @@ libMixins.commonComponents = {
       this.callback,
       this.error
     )
-    this.preParentFile = this.getItem || {}
   },
   methods: {
     clickSearchBtn: function() {
@@ -458,7 +458,7 @@ libraryComponents.OpenIframe = {
     '<div class="lib-wrapper">\
       <lib-post-err ref="postError"></lib-post-err>\
         <lib-post-succ ref="postSuccess"></lib-post-succ>\
-    <lib-header :title="getItem.file_name" @clickright="postEmail" :isShowRight="isShowRight"></lib-header>\
+    <lib-header :title="getItem.file_name" @clickright="postEmail" :isShowRight="!!data.mailcontenturl"></lib-header>\
     <div class="lib-scroll-wrapper">\
     <div class="lib-iframe-wrapper"><iframe class="lib-open-iframe" :src="data.file_content"></iframe></div>\
     </div>\
@@ -466,7 +466,6 @@ libraryComponents.OpenIframe = {
   data: function() {
     return {
       data: {},
-      isShowRight: true
     }
   },
   computed: {

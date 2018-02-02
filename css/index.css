@@ -31,10 +31,6 @@ li.hideLi {
     padding-top: 0;
 }
 
-.top-44 {
-    top: 44px;
-}
-
 header.lib-header {
     padding-right: 0;
     box-shadow: none;
@@ -80,10 +76,6 @@ li.lib-list-item-wrapper {
 }
 
 .lib-searchbtn-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
     width: 100%;
     padding: 8px 15px;
     height: 44px;
@@ -516,14 +508,20 @@ span.vote-header-right {
     transform: scaleY(1)
 }
 
-.cube-pullup-wrapper {
-    margin-top: 30px;
-}
-
 i.lib-right-icon.mui-icon.mui-icon-arrowright.lib-arrow-right {
     padding-right: 10px;
     text-align: right;
     line-height: 64px;
     font-size: 18px;
     color: #CCC;
+}
+
+span.catalog-file-num {
+    position: absolute;
+    right: 30px;
+    top: 0;
+    height: 100%;
+    font-size: 15px;
+    line-height: 64px;
+    color: #999;
 }

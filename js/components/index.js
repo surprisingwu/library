@@ -122,7 +122,7 @@ libraryComponents.ListItem = {
             <span class="time">{{getFormatTime}}</span>\
         </div>\
         <span v-if="data.type===\'catalog\'&&data.filenum" class="catalog-file-num">{{data.filenum}}</span>\
-        <i class="lib-right-icon" v-if="data.file_type>=0&&data.mailcontenturl"  :class="libGetArrowCls" @click.stop="handlerEamil"></i>\
+        <i class="lib-right-icon" v-if="data.file_type>=0&&data.mailcontenturl || data.type===\'catalog\'"  :class="libGetArrowCls" @click.stop="handlerEamil"></i>\
     </div>',
   props: {
     data: {

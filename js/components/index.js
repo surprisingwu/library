@@ -455,14 +455,18 @@ libraryComponents.FivePage = {
 libraryComponents.OpenIframe = {
   mixins: [libMixins.libClickHandler],
   template:
-    '<div class="lib-wrapper">\
-      <lib-post-err ref="postError"></lib-post-err>\
-        <lib-post-succ ref="postSuccess"></lib-post-succ>\
-    <lib-header :title="getItem.file_name" @clickright="postEmail" :isShowRight="!!data.mailcontenturl"></lib-header>\
-    <div class="lib-scroll-wrapper">\
-    <div class="lib-iframe-wrapper"><iframe class="lib-open-iframe" :src="data.file_content"></iframe></div>\
-    </div>\
-</div>',
+    '<div class="lib-wrapper">'+
+      '<lib-post-err ref="postError"></lib-post-err>'+
+        '<lib-post-succ ref="postSuccess"></lib-post-succ>'+
+    '<header class="open-iframe-wrapper">'+
+      '<i class="mui-icon mui-icon-back" @click.stop="turnBack"></i>'+
+      '<h2 class="title">{{getItem.file_name}}</h2>'+
+      '<span class="text" @click.stop="postEmail">转至邮箱</span>'+
+    '</header> '+
+    '<div class="lib-scroll-wrapper">'+
+    '<div class="lib-iframe-wrapper"><iframe class="lib-open-iframe" :src="data.file_content"></iframe></div>'+
+    '</div>'+
+'</div>',
   data: function() {
     return {
       data: {},
@@ -476,6 +480,11 @@ libraryComponents.OpenIframe = {
       }
       this.data = item
       return item
+    }
+  },
+  methods: {
+    turnBack: function(){
+      this.$router.back()
     }
   },
   components: {

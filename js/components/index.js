@@ -491,13 +491,13 @@ libraryComponents.LibSearchPage = {
   <div class="lib-search-header">\
     <div class="input-wrapper">\
     <div class="input-content">\
-      <input placeholder="请输入关键字" type="text" v-model="inptVal" ref="inpt"/>\
+      <input placeholder="请输入关键字" type="text" @click.stop="clickInpt" v-model="inptVal" ref="inpt"/>\
       <i class="search-icon mui-icon mui-icon-search"></i>\
       <i class="delete-icon" @click.stop="deleteInpt"></i>\
       </div></div>\
    <span class="cancel-btn" @click.stop="turnBack">取消</span>\
   </div>\
-  <div class="scroll-wrapper lib-scroll-wrapper"><cube-scroll ref="scroll" :data="data" :options="options" @pulling-up="onPullingUp">\
+  <div class="scroll-wrapper lib-scroll-wrapper" @click.stop="blurInpt"><cube-scroll ref="scroll" :data="data" :options="options" @pulling-up="onPullingUp">\
   <ul class="mui-table-view mui-table-view-chevron" v-show="data&&data.length">\
     <li class="mui-table-view-cell lib-list-item-wrapper" v-for="(item,index) in data">\
       <list-item :data="item" :searchval="inptVal" @listitemclick="clickItem(index)" @postemail="postEmail(index)"></list-item>\
@@ -534,10 +534,10 @@ libraryComponents.LibSearchPage = {
     }
   },
   mounted: function() {
-    // var that = this
-    // setTimeout(function(){
-    //   that.$refs.inpt.click()
-    // },20)
+    var that = this
+    setTimeout(function(){
+      that.$refs.inpt.click()
+    },20)
   },
   computed: {
     noresult: function() {
@@ -549,6 +549,12 @@ libraryComponents.LibSearchPage = {
     }
   },
   methods: {
+    clickInpt: function() {
+      this.$refs.inpt.focus()
+    },
+    blurInpt: function() {
+      this.$refs.inpt.blur()
+    },
     postEmail: function(i) {
       var data = _.type(this.data) === 'array' ? this.data[i] : this.data
       var content_id = data.content_id

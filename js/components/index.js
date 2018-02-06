@@ -115,12 +115,12 @@ libraryComponents.LibHeader = {
 }
 libraryComponents.ListItem = {
   template:
-    '<div @click.stop="clickItem" class="lib-list-item">\
+    '<div><div @click.stop="clickItem" class="lib-list-item">\
         <div class="lib-img-wrapper" :class="libGetCls"></div>\
         <div class="lib-img-content">\
             <h2 class="title" v-html="getFileName"></h2>\
             <span class="time">{{getFormatTime}}</span>\
-        </div>\
+        </div></div>\
         <span v-if="data.type===\'catalog\'&&data.filenum" class="catalog-file-num">{{data.filenum}}</span>\
         <i class="lib-right-icon" v-if="data.file_type>=0&&data.mailcontenturl || data.type===\'catalog\'"  :class="libGetArrowCls" @click.stop="handlerEamil"></i>\
     </div>',
@@ -361,6 +361,9 @@ libraryComponents.SecondPage = {
       preParentFile: {}
     }
   },
+  created: function() {
+   this.preParentFile = this.$store.getters.currentLib
+  },
   computed: {
     getItem: function() {
       var item = this.$store.getters.currentLib
@@ -395,6 +398,9 @@ libraryComponents.ThirdPage = {
       preParentFile: {}
     }
   },
+  created: function() {
+    this.preParentFile = this.$store.getters.currentLib
+   },
   computed: {
     getItem: function() {
       var item = this.$store.getters.currentLib
@@ -415,9 +421,13 @@ libraryComponents.FouthPage = {
       options: {
         click: true
       },
-      isNofile: false
+      isNofile: false,
+      preParentFile: {}
     }
   },
+  created: function() {
+    this.preParentFile = this.$store.getters.currentLib
+   },
   computed: {
     getItem: function() {
       var item = this.$store.getters.currentLib
@@ -425,6 +435,9 @@ libraryComponents.FouthPage = {
         mui.alert('没有对应的数据', '提示', '确定')
       }
       return item
+    },
+    preParentFile: function() {
+      return this.$store.getters.currentLib
     }
   }
 }
@@ -438,9 +451,13 @@ libraryComponents.FivePage = {
       options: {
         click: true
       },
-      isNofile: false
+      isNofile: false,
+      preParentFile: {}
     }
   },
+  created: function() {
+    this.preParentFile = this.$store.getters.currentLib
+   },
   computed: {
     getItem: function() {
       var item = this.$store.getters.currentLib
@@ -448,6 +465,9 @@ libraryComponents.FivePage = {
         mui.alert('没有对应的数据', '提示', '确定')
       }
       return item
+    },
+    preParentFile: function() {
+      return this.$store.getters.currentLib
     }
   }
 }

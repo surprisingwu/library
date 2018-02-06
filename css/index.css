@@ -40,7 +40,7 @@ header.lib-header {
 }
 
 li.lib-list-item-wrapper {
-    padding: 8px 15px;
+    padding: 8px 50px 8px 15px !important;
     background-color: #fff;
 }
 
@@ -52,8 +52,12 @@ li.lib-list-item-wrapper {
     font-size: 15px;
 }
 
+li.lib-list-item-wrapper .lib-list-item {
+    display: flex;
+    display: -webkit-flex;
+}
+
 .lib-list-item .lib-img-wrapper {
-    display: inline-block;
     margin-right: 14px;
     margin-top: 6px;
     vertical-align: top;
@@ -68,10 +72,10 @@ li.lib-list-item-wrapper {
     position: absolute;
     right: 0;
     top: 0;
-    width: 60px;
+    width: 50px;
     height: 100%;
     background-repeat: no-repeat;
-    background-position: 27px center;
+    background-position: center;
     background-size: 18px 18px;
 }
 
@@ -139,11 +143,11 @@ li.lib-list-item-wrapper {
     background-image: url(../img/other@2x.png);
 }
 
-.lib-list-item .lib-type-arrow {
+li.lib-list-item-wrapper .lib-type-arrow {
     background-image: url(../img/arrow@2x.png);
 }
 
-.lib-list-item .lib-type-post {
+li.lib-list-item-wrapper .lib-type-post {
     background-image: url(../img/post@2x.png);
 }
 
@@ -176,10 +180,10 @@ li.lib-list-item-wrapper {
     .lib-list-item .lib-type-other {
         background-image: url(../img/other@3x.png);
     }
-    .lib-list-item .lib-type-arrow {
+    li.lib-list-item-wrapper .lib-type-arrow {
         background-image: url(../img/arrow@3x.png);
     }
-    .lib-list-item .lib-type-post {
+    li.lib-list-item-wrapper .lib-type-post {
         background-image: url(../img/post@3x.png);
     }
     .lib-nofile-wrapper {
@@ -188,7 +192,9 @@ li.lib-list-item-wrapper {
 }
 
 .lib-list-item .lib-img-content {
-    display: inline-block;
+    flex: 1;
+    -webkit-flex: 1;
+    overflow: hidden;
     vertical-align: top;
     font-size: 0;
     line-height: 0;
@@ -197,6 +203,9 @@ li.lib-list-item-wrapper {
 .lib-img-content .title {
     margin-top: 0;
     margin-bottom: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     line-height: 24px;
     font-size: 15px;
     color: #4A4A4A;

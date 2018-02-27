@@ -22,6 +22,7 @@ libMixins.libClickHandler = {
       mui.alert('打开该文件失败!', '提示', '确定')
     },
     postEmail: function(i) {
+      this.isShowLoading = true
       var data = _.type(this.data) === 'array' ? this.data[i] : this.data
       var content_id = data.content_id
       var user_code = _.getStorage('user_code')
@@ -40,6 +41,7 @@ libMixins.libClickHandler = {
       )
     },
     postMailSuc: function(data) {
+      this.isShowLoading = false
       var lbToast = this.$refs.postSuccess
       lbToast.show()
       setTimeout(function() {
@@ -47,6 +49,7 @@ libMixins.libClickHandler = {
       }, 2000)
     },
     postMailErr: function(err) {
+      this.isShowLoading = false
       var lbToast = this.$refs.postError
       lbToast.show()
       setTimeout(function() {
@@ -58,11 +61,23 @@ libMixins.libClickHandler = {
 libraryComponents.LibLoading = {
   template:
     '<div class="lib-loading">\
-              <img src="img/loading.gif" width="24" height="24">\
-              <p class="lib-loading-desc">{{title}}</p>\
+              <img :src="src" :width="width" :height="height">\
+              <p class="lib-loading-desc" v-show="title">{{title}}</p>\
         </div>',
 
   props: {
+    src: {
+      type: String,
+      default: 'img/loading.gif'
+    },
+    width: {
+      type: Number,
+      default: 24
+    },
+    height: {
+      type: Number,
+      default: 24
+    },
     title: {
       type: String,
       default: '正在载入 ...'
@@ -122,7 +137,7 @@ libraryComponents.ListItem = {
             <span class="time">{{getFormatTime}}</span>\
         </div></div>\
         <span v-if="data.type===\'catalog\'&&data.filenum" class="catalog-file-num">{{data.filenum}}</span>\
-        <i class="lib-right-icon" v-if="data.file_type>=0&&data.mailcontenturl || data.type===\'catalog\'"  :class="libGetArrowCls" @click.stop="handlerEamil"></i>\
+        <i class="lib-right-icon" v-if="data.type===\'catalog\'"  :class="libGetArrowCls" @click.stop="handlerEamil"></i>\
     </div>',
   props: {
     data: {
@@ -279,6 +294,9 @@ var libCommonTemplate =
 <div class="lib-nofile-container" v-show="isNofile"><lib-nofile-img></lib-nofile-img></div>\
 <lib-post-err ref="postError"></lib-post-err>\
 <lib-post-succ ref="postSuccess"></lib-post-succ>\
+<div class="lib-loading-post" v-show="isShowLoading">\
+  <lib-loading title="" src="img/load.gif" :width="width" :height="height"></lib-loading>\
+</div>\
 <keep-alive>\
     <transition name="lib-slide">\
         <router-view></router-view>\
@@ -338,7 +356,8 @@ libMixins.commonComponents = {
     LibPostErr: libraryComponents.LibPostErr,
     LibPostSucc: libraryComponents.LibPostSucc,
     LibNofileImg: libraryComponents.LibNofileImg,
-    LibSearchBtn: libraryComponents.LibSearchBtn
+    LibSearchBtn: libraryComponents.LibSearchBtn,
+    LibLoading: libraryComponents.LibLoading,
   }
 }
 libraryComponents.LibSearchLoading = {
@@ -354,6 +373,9 @@ libraryComponents.SecondPage = {
   data: function() {
     return {
       data: [],
+      isShowLoading: false,
+      width: 70,
+      height: 70,
       options: {
         click: true
       },
@@ -391,6 +413,9 @@ libraryComponents.ThirdPage = {
   data: function() {
     return {
       data: [],
+      isShowLoading: false,
+      width: 70,
+      height: 70,
       options: {
         click: true
       },
@@ -418,6 +443,9 @@ libraryComponents.FouthPage = {
   data: function() {
     return {
       data: [],
+      isShowLoading: false,
+      width: 70,
+      height: 70,
       options: {
         click: true
       },
@@ -448,6 +476,9 @@ libraryComponents.FivePage = {
   data: function() {
     return {
       data: [],
+      isShowLoading: false,
+      width: 70,
+      height: 70,
       options: {
         click: true
       },
@@ -481,8 +512,11 @@ libraryComponents.OpenIframe = {
     '<header class="open-iframe-wrapper">'+
       '<i class="mui-icon mui-icon-back" @click.stop="turnBack"></i>'+
       '<h2 class="title">{{getItem.file_name}}</h2>'+
-      '<span class="text" @click.stop="postEmail">转至邮箱</span>'+
+      '<span class="text" @click.stop="postEmail" style="display:none">转至邮箱</span>'+
     '</header> '+
+    '<div class="lib-loading-post" v-show="isShowLoading">'+
+      '<lib-loading title="" src="img/load.gif" :width="width" :height="height"></lib-loading>'+
+    '</div>'+
     '<div class="lib-scroll-wrapper">'+
     '<div class="lib-iframe-wrapper"><iframe class="lib-open-iframe" :src="data.file_content"></iframe></div>'+
     '</div>'+
@@ -490,6 +524,9 @@ libraryComponents.OpenIframe = {
   data: function() {
     return {
       data: {},
+      isShowLoading: false,
+      width: 70,
+      height: 70,
     }
   },
   computed: {
@@ -510,7 +547,8 @@ libraryComponents.OpenIframe = {
   components: {
     LibHeader: libraryComponents.LibHeader,
     LibPostErr: libraryComponents.LibPostErr,
-    LibPostSucc: libraryComponents.LibPostSucc
+    LibPostSucc: libraryComponents.LibPostSucc,
+    LibLoading: libraryComponents.LibLoading,
   }
 }
 
@@ -703,6 +741,6 @@ libraryComponents.LibSearchPage = {
     LibSearchLoading: libraryComponents.LibSearchLoading,
     ListItem: libraryComponents.ListItem,
     LibPostErr: libraryComponents.LibPostErr,
-    LibPostSucc: libraryComponents.LibPostSucc
+    LibPostSucc: libraryComponents.LibPostSucc,
   }
 }

@@ -137,7 +137,7 @@ libraryComponents.ListItem = {
             <span class="time">{{getFormatTime}}</span>\
         </div></div>\
         <span v-if="data.type===\'catalog\'&&data.filenum" class="catalog-file-num">{{data.filenum}}</span>\
-        <i class="lib-right-icon" v-if="data.type===\'catalog\'"  :class="libGetArrowCls" @click.stop="handlerEamil"></i>\
+        <i class="lib-right-icon" v-if="data.type===\'catalog\'||data.file_type"  :class="libGetArrowCls" @click.stop="handlerEamil"></i>\
     </div>',
   props: {
     data: {
@@ -512,7 +512,7 @@ libraryComponents.OpenIframe = {
     '<header class="open-iframe-wrapper">'+
       '<i class="mui-icon mui-icon-back" @click.stop="turnBack"></i>'+
       '<h2 class="title">{{getItem.file_name}}</h2>'+
-      '<span class="text" @click.stop="postEmail" style="display:none">转至邮箱</span>'+
+      '<span class="text" @click.stop="postEmail">转至邮箱</span>'+
     '</header> '+
     '<div class="lib-loading-post" v-show="isShowLoading">'+
       '<lib-loading title="" src="img/load.gif" :width="width" :height="height"></lib-loading>'+
@@ -656,7 +656,8 @@ libraryComponents.LibSearchPage = {
       }, 2000)
     },
     onPullingUp: function() {
-      if (this.data.length >= 15) {
+      // 第一次加载后,并且有值才允许上拉
+      if (this.data.length) {
         this.getRetData()
       } else {
         this.$refs.scroll.forceUpdate(false)

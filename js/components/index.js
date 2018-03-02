@@ -2,6 +2,8 @@ var libraryComponents = {}
 var CATALOG_FILE = 'catalog' // 文件夹
 var libMixins = {}
 var libFileType = ['doc', 'ppt', 'pdf', 'txt', 'excel', 'jpg', 'png', 'other']
+var LOAD_GIF_WIDTH = 40
+var LOAD_GIF_HEIGHT = 40
 libMixins.libClickHandler = {
   methods: {
     openPDFHandler: function(i) {
@@ -374,8 +376,8 @@ libraryComponents.SecondPage = {
     return {
       data: [],
       isShowLoading: false,
-      width: 70,
-      height: 70,
+      width: LOAD_GIF_WIDTH,
+      height: LOAD_GIF_HEIGHT,
       options: {
         click: true
       },
@@ -397,7 +399,6 @@ libraryComponents.SecondPage = {
   },
   methods: {
     clickSearchBtn: function() {
-      debugger
       this.$router.push({ path: '/haschildren/search' })
     }
   },
@@ -414,8 +415,8 @@ libraryComponents.ThirdPage = {
     return {
       data: [],
       isShowLoading: false,
-      width: 70,
-      height: 70,
+      width: LOAD_GIF_WIDTH,
+      height: LOAD_GIF_HEIGHT,
       options: {
         click: true
       },
@@ -444,8 +445,8 @@ libraryComponents.FouthPage = {
     return {
       data: [],
       isShowLoading: false,
-      width: 70,
-      height: 70,
+      width: LOAD_GIF_WIDTH,
+      height: LOAD_GIF_HEIGHT,
       options: {
         click: true
       },
@@ -477,8 +478,8 @@ libraryComponents.FivePage = {
     return {
       data: [],
       isShowLoading: false,
-      width: 70,
-      height: 70,
+      width: LOAD_GIF_WIDTH,
+      height: LOAD_GIF_HEIGHT,
       options: {
         click: true
       },
@@ -525,8 +526,8 @@ libraryComponents.OpenIframe = {
     return {
       data: {},
       isShowLoading: false,
-      width: 70,
-      height: 70,
+      width: LOAD_GIF_WIDTH,
+      height: LOAD_GIF_HEIGHT,
     }
   },
   computed: {
@@ -574,6 +575,9 @@ libraryComponents.LibSearchPage = {
   <div class="lib-search-noresult" v-html="noresult" v-show="isNoresult"></div>\
   <div class="search-loading-wrapper" v-show="isShowLoading"><lib-search-loading></lib-search-loading></div>\
   <lib-post-err ref="postError"></lib-post-err>\
+  <div class="lib-loading-post" v-show="isShowLoadGif">\
+  <lib-loading title="" src="img/load.gif" :width="width" :height="height"></lib-loading>\
+</div>\
   <lib-post-succ ref="postSuccess"></lib-post-succ>\
   <keep-alive>\
   <transition name="lib-slide">\
@@ -584,6 +588,9 @@ libraryComponents.LibSearchPage = {
   data: function() {
     return {
       inptVal: '',
+      width: LOAD_GIF_WIDTH,
+      height: LOAD_GIF_HEIGHT,
+      isShowLoadGif: false,
       isShowLoading: false,
       data: [],
       pageindex: 1,
@@ -623,6 +630,7 @@ libraryComponents.LibSearchPage = {
       this.$refs.inpt.blur()
     },
     postEmail: function(i) {
+      this.isShowLoadGif = true
       var data = _.type(this.data) === 'array' ? this.data[i] : this.data
       var content_id = data.content_id
       var user_code = _.getStorage('user_code')
@@ -641,6 +649,7 @@ libraryComponents.LibSearchPage = {
       )
     },
     postMailSuc: function(data) {
+      this.isShowLoadGif = false
       this.$refs.inpt.blur()
       var lbToast = this.$refs.postSuccess
       lbToast.show()
@@ -649,6 +658,7 @@ libraryComponents.LibSearchPage = {
       }, 2000)
     },
     postMailErr: function(err) {
+      this.isShowLoadGif = false
       var lbToast = this.$refs.postError
       lbToast.show()
       setTimeout(function() {
@@ -743,5 +753,6 @@ libraryComponents.LibSearchPage = {
     ListItem: libraryComponents.ListItem,
     LibPostErr: libraryComponents.LibPostErr,
     LibPostSucc: libraryComponents.LibPostSucc,
+    LibLoading: libraryComponents.LibLoading
   }
 }
